@@ -1,7 +1,5 @@
 package com.isep.acme.model;
 
-import org.springframework.data.mongodb.core.mapping.Field;
-
 import javax.persistence.*;
 import java.util.Objects;
 
