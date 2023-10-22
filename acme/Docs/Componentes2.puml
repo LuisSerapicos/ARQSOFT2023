@@ -1,0 +1,21 @@
+@startuml
+!theme cyborg-outline
+skinparam BackgroundColor transparent
+skinparam componentStyle uml2
+component acme {
+portin p1
+   component "Management" {
+}
+interface "Spring Data JPA" as JPA
+component "Database" {
+}
+}
+
+
+[p1]-up-- API
+[p1] -down- Management
+Management -right- JPA
+JPA -right--- Database
+
+
+@enduml

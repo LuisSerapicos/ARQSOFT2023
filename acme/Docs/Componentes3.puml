@@ -1,0 +1,69 @@
+@startuml
+!theme cyborg-outline
+skinparam BackgroundColor transparent
+skinparam componentStyle uml2
+
+component acme {
+
+    portin "p3"
+    portin p4
+    portin p5
+    portin p1
+
+    component "Route" {
+    }
+    component "Controller" {
+    }
+    component "Service" {
+    }
+    component "RepositoryDB"
+
+    component "Model" {
+    }
+
+    component "SpringData MongoDB" as Mongo
+    component "SpringData Neo4j" as Neo
+    component "SpringData Redis" as Re
+
+    component "Sku"
+
+    interface "ISkuGenerator"
+    interface "IController"
+    interface "IService"
+    interface "IModel"
+    interface "IDatabase"
+}
+
+
+[p1]-up- API
+[p3]-up- MongoDB
+[p4]-up- Neo4J
+[p5]-up- Redis
+Route -down-( IController
+IController -down- "Controller"
+Controller -down-( "IService"
+"IService" -down- "Service"
+"Service" -down-( "IModel"
+"IModel" -down- "Model"
+[p1] -down- Route
+
+
+Service -left-( IDatabase
+IDatabase -left- RepositoryDB
+"RepositoryDB" --up-- Mongo
+"RepositoryDB" --up-- Neo
+"RepositoryDB" --up-- Re
+
+Mongo -up- "p3"
+Neo -up- p4
+Re -up- p5
+
+
+
+
+"Service" -down- ISkuGenerator
+ISkuGenerator -- "Sku"
+
+
+
+@enduml
