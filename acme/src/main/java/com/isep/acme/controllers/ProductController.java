@@ -33,8 +33,9 @@ class ProductController {
     @Operation(summary = "gets catalog, i.e. all products")
     @GetMapping
     public ResponseEntity<Iterable<ProductDTO>> getCatalog() {
-       final var products = service.getCatalog();
 
+       final var products = service.getCatalog();
+       service.createSku();
        return ResponseEntity.ok().body( products );
     }
 

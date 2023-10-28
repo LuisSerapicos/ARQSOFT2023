@@ -3,9 +3,13 @@ package com.isep.acme.services;
 import com.isep.acme.model.Product;
 import com.isep.acme.model.ProductDTO;
 import com.isep.acme.model.ProductDetailDTO;
+import com.isep.acme.repositories.DataBase;
 import com.isep.acme.repositories.ProductRepository;
 
+import com.isep.acme.sku.SkuGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,23 +19,33 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private final SkuGenerator skuType;
+
+    private final DataBase dataBase;
+
+
+    private final ProductRepository repository;
+
     @Autowired
-    private ProductRepository repository;
+    public ProductServiceImpl(@Value("${sku.interface.generator.default}") String beanName, @Value("${database.interface.default}") String beanName2 ,ApplicationContext context, ProductRepository repository) {
+        this.dataBase = context.getBean(beanName2, DataBase.class);
+        this.skuType = context.getBean(beanName, SkuGenerator.class);
+        this.repository = repository;
+    }
 
     @Override
-    public Optional<Product> getProductBySku( final String sku ) {
+    public Optional<Product> getProductBySku(final String sku) {
+        return dataBase.findBySku(sku);
 
-        return repository.findBySku(sku);
     }
 
     @Override
     public Optional<ProductDTO> findBySku(String sku) {
-        final Optional<Product> product = repository.findBySku(sku);
-
-        if( product.isEmpty() )
+        final Optional<Product> product = dataBase.findBySku(sku);
+        if (product.isEmpty())
             return Optional.empty();
         else
-            return Optional.of( product.get().toDto() );
+            return Optional.of(product.get().toDto());
     }
 
 
@@ -39,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
     public Iterable<ProductDTO> findByDesignation(final String designation) {
         Iterable<Product> p = repository.findByDesignation(designation);
         List<ProductDTO> pDto = new ArrayList();
-        for (Product pd:p) {
+        for (Product pd : p) {
             pDto.add(pd.toDto());
         }
 
@@ -50,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
     public Iterable<ProductDTO> getCatalog() {
         Iterable<Product> p = repository.findAll();
         List<ProductDTO> pDto = new ArrayList();
-        for (Product pd:p) {
+        for (Product pd : p) {
             pDto.add(pd.toDto());
         }
 
@@ -59,8 +73,7 @@ public class ProductServiceImpl implements ProductService {
 
     public ProductDetailDTO getDetails(String sku) {
 
-        Optional<Product> p = repository.findBySku(sku);
-
+        Optional<Product> p = dataBase.findBySku(sku);
         if (p.isEmpty())
             return null;
         else
@@ -70,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO create(final Product product) {
+
         final Product p = new Product(product.getSku(), product.getDesignation(), product.getDescription());
 
         return repository.save(p).toDto();
@@ -77,20 +91,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateBySku(String sku, Product product) {
-        
-        final Optional<Product> productToUpdate = repository.findBySku(sku);
 
-        if( productToUpdate.isEmpty() ) return null;
+        final Optional<Product> productToUpdate = dataBase.findBySku(sku);
+
+        if (productToUpdate.isEmpty()) return null;
 
         productToUpdate.get().updateProduct(product);
 
         Product productUpdated = repository.save(productToUpdate.get());
-        
+
         return productUpdated.toDto();
     }
 
     @Override
     public void deleteBySku(String sku) {
         repository.deleteBySku(sku);
+    }
+
+    @Override
+    public void createSku() {
+            skuType.generateSku(null);
     }
 }

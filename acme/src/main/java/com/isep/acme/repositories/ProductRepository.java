@@ -1,9 +1,11 @@
 package com.isep.acme.repositories;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.isep.acme.model.Product;
@@ -11,10 +13,14 @@ import com.isep.acme.model.Product;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRepository extends CrudRepository<Product, Long> {
+@Component("sql")
+public interface ProductRepository extends CrudRepository<Product, Long>, DataBase {
     List<Product> findByDesignation(String designation);
 
-    Optional<Product> findBySku(String sku);
+    default Optional<Product> findBySku(String sku){
+        System.out.println("SQL");
+        return Optional.of(new Product("asd578fgh267", "Pen", "very good nice product"));
+    }
 
     //Obtain the catalog of products -> Catalog: show sku and designation of all products
     @Query("SELECT p FROM Product p WHERE p.sku=:sku AND p.description=:description")
