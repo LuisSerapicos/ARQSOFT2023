@@ -1,5 +1,5 @@
-public class Cvrctd {
+public class Cmcaqw {
     public static void main() {
-        System.out.println("ascfu");
+        System.out.println("gfgqc");
     }
 }
