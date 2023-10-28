@@ -28,8 +28,30 @@ public class Cmyhwh {
         System.out.println("hyfjq");
         System.out.println("hxefi");
         System.out.println("pxuyb");
-        System.out.println("yaers");
-        System.out.println("mhrby");
-        System.out.println("xswlq");
+        System.out.println("rdmty");
+        System.out.println("qpuyt");
+        System.out.println("mpfvc");
+        System.out.println("tkymd");
+        System.out.println("ctrlq");
+        System.out.println("prjwh");
+        System.out.println("edgnc");
+        System.out.println("csfea");
+        System.out.println("cvxwx");
+        System.out.println("kuujk");
+        System.out.println("gigyn");
+        System.out.println("lvwor");
+        System.out.println("kxhlh");
+        System.out.println("uepyf");
+        System.out.println("witkd");
+        System.out.println("unycx");
+        System.out.println("jjaew");
+        System.out.println("insiw");
+        System.out.println("aelco");
+        System.out.println("gostu");
+        System.out.println("wxxce");
+        System.out.println("jisay");
+        System.out.println("ekfbs");
+        System.out.println("guajt");
+        System.out.println("budbl");
     }
 }
