@@ -5,8 +5,9 @@ import org.springframework.stereotype.Component;
 @Component("skuB")
 public class SkuGeneratorImplB implements SkuGenerator {
     @Override
-    public void generateSku(String designation) {
+    public String generateSku(String designation) {
 
         System.out.println("Generate skuB");
+        return designation;
     }
 }
