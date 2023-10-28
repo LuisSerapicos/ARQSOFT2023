@@ -2,12 +2,14 @@ package com.isep.acme.bootstrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.stereotype.Component;
 
 import com.isep.acme.model.Product;
 import com.isep.acme.repositories.ProductRepository;
 
 @Component
+@EnableNeo4jRepositories
 //@Profile("bootstrap")
 public class ProductBootstrapper implements CommandLineRunner {
 
