@@ -1,5 +1,5 @@
-public class Cmscjw {
+public class Cbmquj {
     public static void main() {
-        System.out.println("wdsna");
+        System.out.println("qtrsp");
     }
 }
