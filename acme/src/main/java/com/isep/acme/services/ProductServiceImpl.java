@@ -110,6 +110,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void createSku() {
-            skuType.generateSku(null);
+            skuType.generateSku("pencil");
     }
 }
