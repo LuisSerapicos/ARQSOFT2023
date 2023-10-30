@@ -1,12 +1,6 @@
 package com.isep.acme.repositories;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.isep.acme.model.Product;
 
@@ -14,34 +8,63 @@ import java.util.List;
 import java.util.Optional;
 
 @Component("sql")
-public interface ProductRepository extends CrudRepository<Product, Long>, DataBase {
-    List<Product> findByDesignation(String designation);
+public class ProductRepository implements ProductDataBase {
 
-    default Optional<Product> findBySku(String sku){
-        System.out.println("SQL");
-        return Optional.of(new Product("asd578fgh267", "Pen", "very good nice product"));
+
+    @Override
+    public Product updateBySku(String sku, Product updatedProduct) {
+        return null;
+    }
+
+    @Override
+    public Optional<Product> findById(Long productID) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Product create(Product p) {
+        return null;
+    }
+
+
+    @Override
+    public Product saveProduct(Product product) {
+        return null;
+    }
+
+    @Override
+    public Product updateProduct(Product product) {
+        return null;
+    }
+
+    @Override
+    public Optional<Product> findBySku(String sku) {
+        System.out.println("Repository SQL: " + sku);
+        return Optional.empty();
+    }
+
+    @Override
+    public Iterable<Product> getCatalog() {
+        return null;
+    }
+
+    @Override
+    public void deleteBySku(String sku) {
+
+    }
+
+    @Override
+    public List<Product> findByDesignation(String designation) {
+        return null;
     }
 
     //Obtain the catalog of products -> Catalog: show sku and designation of all products
-    @Query("SELECT p FROM Product p WHERE p.sku=:sku AND p.description=:description")
-    Optional<Product> getCatalog();
+
 
     //Obtain the details of products -> Destails: show sku, designation and description of all products
 
     //Delete the product when given the SKU
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Product p WHERE p.sku=:sku")
-    void deleteBySku(@Param("sku") String sku);
 
-    //Update the product when given the SKU
-    @Transactional
-    @Modifying
-    @Query("UPDATE Product p SET p.sku = :sku WHERE p.sku=:sku")
-    Product updateBySku(@Param("sku") String sku);
-
-    @Query("SELECT p FROM Product p WHERE p.productID=:productID")
-    Optional<Product> findById(Long productID);
 
   /*  @Query("SELECT p FROM ProdImage p WHERE p.id=:id")
     Optional<Product> findById(Long  id); */

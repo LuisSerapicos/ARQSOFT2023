@@ -1,45 +1,47 @@
-package com.isep.acme.model;
+package com.isep.acme.persistance.neo4j;
+
+import com.isep.acme.model.ProductDTO;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-public class Product {
+@Node("Product")
+public class ProductNeo4J {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long productID;
 
-    @Column(nullable = false, unique = true)
     public String sku;
 
-    @Column(nullable = false)
     private String designation;
 
-    @Column(nullable = false)
     private String description;
     /*
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Review> review = new ArrayList<Review>(); */
 
-    public Product(){}
+    protected ProductNeo4J(){}
 
-    public Product(final Long productID, final String sku) {
+    public ProductNeo4J(final Long productID, final String sku) {
         this.productID = Objects.requireNonNull(productID);
         setSku(sku);
     }
 
-    public Product(final Long productID, final String sku, final String designation, final String description) {
+    public ProductNeo4J(final Long productID, final String sku, final String designation, final String description) {
         this(productID, sku);
         setDescription(description);
         setDesignation(designation);
     }
 
-    public Product(final String sku) {
+    public ProductNeo4J(final String sku) {
         setSku(sku);
     }
 
-    public Product(final String sku, final String designation, final String description) {
+    public ProductNeo4J(final String sku, final String designation, final String description) {
         this(sku);
         setDescription(description);
         setDesignation(designation);
@@ -91,7 +93,7 @@ public class Product {
     }
 
 
-    public void updateProduct(Product p) {
+    public void updateProduct(ProductNeo4J p) {
         setDesignation(p.designation);
         setDescription(p.description);
     }

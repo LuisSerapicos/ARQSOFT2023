@@ -42,7 +42,7 @@ class ProductController {
     @Operation(summary = "finds product by sku")
     @GetMapping(value = "/{sku}")
     public ResponseEntity<ProductDTO> getProductBySku(@PathVariable("sku") final String sku) {
-
+        System.out.println("Controller:"+sku);
         final Optional<ProductDTO> product = service.findBySku(sku);
 
         if( product.isEmpty())
