@@ -1,6 +1,6 @@
 package com.isep.acme.repositories.neo4j;
 
-/*import com.isep.acme.model.Product;
+import com.isep.acme.model.Product;
 import com.isep.acme.persistance.neo4j.ProductNeo4J;
 import com.isep.acme.repositories.DataBase;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @Component("neo4J")
-public interface ProductRepositoryNeo4J extends Neo4jRepository<ProductNeo4J, Long>, DataBase {
+public class ProductRepositoryNeo4J extends Neo4jRepository<ProductNeo4J, Long>, DataBase {
 
     Optional<Product> findBySku(String sku);
     @Query("MATCH (p:Product) RETURN p")
@@ -24,4 +24,4 @@ public interface ProductRepositoryNeo4J extends Neo4jRepository<ProductNeo4J, Lo
     @Modifying
     @Query("MATCH (p:Product {sku: $sku}) DETACH DELETE p")
     void deleteBySku(@Param("sku") String sku);
-}*/
+}
