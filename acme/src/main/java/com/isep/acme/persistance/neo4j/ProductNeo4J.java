@@ -1,19 +1,23 @@
 package com.isep.acme.persistance.neo4j;
 
 import com.isep.acme.model.ProductDTO;
-import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.neo4j.ogm.id.UuidStrategy;
+import org.neo4j.ogm.typeconversion.UuidStringConverter;
+import org.springframework.data.neo4j.core.schema.Node;
 
-import javax.persistence.*;
+import javax.persistence.Convert;
+import javax.persistence.GenerationType;
 import java.util.Objects;
 
-@Node("Product")
+@Node("ProductNeo4J")
 public class ProductNeo4J {
 
     @Id
     @GeneratedValue
-    private Long productID;
+    private Long id;
 
     public String sku;
 
@@ -26,13 +30,13 @@ public class ProductNeo4J {
 
     protected ProductNeo4J(){}
 
-    public ProductNeo4J(final Long productID, final String sku) {
-        this.productID = Objects.requireNonNull(productID);
+    public ProductNeo4J(final Long id, final String sku) {
+        this.id = Objects.requireNonNull(id);
         setSku(sku);
     }
 
-    public ProductNeo4J(final Long productID, final String sku, final String designation, final String description) {
-        this(productID, sku);
+    public ProductNeo4J(final Long id, final String sku, final String designation, final String description) {
+        this(id, sku);
         setDescription(description);
         setDesignation(designation);
     }
@@ -45,6 +49,10 @@ public class ProductNeo4J {
         this(sku);
         setDescription(description);
         setDesignation(designation);
+    }
+
+    public void setProductID(Long id) {
+        this.id = id;
     }
 
     public void setSku(String sku) {
@@ -99,7 +107,7 @@ public class ProductNeo4J {
     }
 
     public Long getProductID() {
-        return productID;
+        return id;
     }
 
     public ProductDTO toDto() {

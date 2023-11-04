@@ -1,5 +1,7 @@
 package com.isep.acme.bootstrapper;
 
+import com.isep.acme.persistance.neo4j.ProductNeo4J;
+import com.isep.acme.repositories.neo4j.ProductRepositoryNeo4J;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
@@ -18,7 +20,6 @@ public class ProductBootstrapper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        
         if (pRepo.findBySku("asd578fgh267").isEmpty()) {
             Product p1 = new Product("asd578fgh267", "Pen", "very good nice product");
             pRepo.saveProduct(p1);
