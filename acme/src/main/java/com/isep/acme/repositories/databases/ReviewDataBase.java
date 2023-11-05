@@ -25,4 +25,6 @@ public interface ReviewDataBase {
     Optional<List<Review>> findPendingReviews();
 
     Optional<List<Review>> findByUserId(User user);
+
+    Optional<List<Review>> findByApprovalStatus(String status);
 }

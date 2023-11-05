@@ -60,4 +60,9 @@ public class ReviewRepository implements ReviewDataBase {
     public Optional<List<Review>> findByUserId(User user) {
         return Optional.empty();
     }
+
+    @Override
+    public Optional<List<Review>> findByApprovalStatus(String status) {
+        return Optional.empty();
+    }
 }

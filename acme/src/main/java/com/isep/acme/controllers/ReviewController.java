@@ -22,6 +22,14 @@ class ReviewController {
     @Autowired
     private ReviewService rService;
 
+    @Operation(summary = "recommended reviews")
+    @GetMapping("/reviews/recommended/{userID}")
+    public ResponseEntity<Iterable<ReviewDTO>> recommendedReview(@PathVariable(value = "userID") final Long userID) {
+        final var recommended = rService.getRecommendedReviews(userID);
+
+        return ResponseEntity.ok().body( recommended );
+    }
+
     @GetMapping("/reviews/all")
     public ResponseEntity<Iterable<Review>> findAll() {
 
