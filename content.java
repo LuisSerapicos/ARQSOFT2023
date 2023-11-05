@@ -1,5 +1,5 @@
-public class Cglsdm {
+public class Cypwxv {
     public static void main() {
-        System.out.println("rrmpp");
+        System.out.println("bctjb");
     }
 }
