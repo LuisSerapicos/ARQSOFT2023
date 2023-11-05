@@ -1,5 +1,5 @@
-public class Cfjdcx {
+public class Castry {
     public static void main() {
-        System.out.println("dpcna");
+        System.out.println("uiogr");
     }
 }
