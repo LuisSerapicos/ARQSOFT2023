@@ -1,5 +1,5 @@
-public class Chmvdk {
+public class Cdweda {
     public static void main() {
-        System.out.println("enldy");
+        System.out.println("jrnit");
     }
 }
