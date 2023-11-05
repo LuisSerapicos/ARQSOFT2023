@@ -1,5 +1,5 @@
-public class Cowtux {
+public class Csgqyw {
     public static void main() {
-        System.out.println("iknxk");
+        System.out.println("sknvo");
     }
 }
