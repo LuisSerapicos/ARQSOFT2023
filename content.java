@@ -1,5 +1,5 @@
-public class Ctxtlx {
+public class Cgjfac {
     public static void main() {
-        System.out.println("jubeb");
+        System.out.println("gdvvq");
     }
 }
