@@ -85,7 +85,8 @@ public class Review {
 
     }
 
-    public Review(final String reviewText, LocalDate publishingDate, Product product, String funFact, Rating rating, User user) {
+    public Review(final Long idReview, final String reviewText, LocalDate publishingDate, Product product, String funFact, Rating rating, User user) {
+        setIdReview(idReview);
         setReviewText(reviewText);
         setProduct(product);
         setPublishingDate(publishingDate);
@@ -97,12 +98,12 @@ public class Review {
         this.downVote = new ArrayList<>();
     }
 
-    public Review(Long idReview, final String reviewText, LocalDate publishingDate, Product product, String funFact, Rating rating, User user) {
-        this.idReview = idReview;
+    public Review(final Long idReview, final String approvalStatus, final String reviewText, LocalDate publishingDate, Product product, String funFact, Rating rating, User user) {
+        setIdReview(idReview);
         setReviewText(reviewText);
         setProduct(product);
         setPublishingDate(publishingDate);
-        setApprovalStatus("pending");
+        setApprovalStatus(approvalStatus);
         setFunFact(funFact);
         setRating(rating);
         setUser(user);
@@ -125,6 +126,10 @@ public class Review {
 
     public Long getIdReview() {
         return idReview;
+    }
+
+    public void setIdReview(Long idReview) {
+        this.idReview = idReview;
     }
 
     public String getApprovalStatus() {
@@ -203,7 +208,6 @@ public class Review {
 
     public void setUser(User user) {
         this.user = user;
-        System.out.println("");
     }
 
     public Rating getRating() {

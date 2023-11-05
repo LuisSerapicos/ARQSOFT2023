@@ -3,6 +3,7 @@ package com.isep.acme.repositories.mongodb;
 import com.isep.acme.controllers.ResourceNotFoundException;
 import com.isep.acme.model.User;
 import com.isep.acme.persistance.mongodb.UserMongo;
+import com.isep.acme.persistance.neo4j.UserNeo4J;
 import com.isep.acme.repositories.databases.UserDataBase;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -84,5 +85,10 @@ public class UserRepositoryMongoDB implements UserDataBase {
     @Override
     public UserMongo toUserMongo(User user) {
         return new UserMongo(user.getUserId(), user.getUsername(), user.getPassword(),user.getFullName(),user.getAuthorities(),user.getNif(),user.getMorada());
+    }
+
+    @Override
+    public UserNeo4J toUserNeo4J(User user) {
+        return null;
     }
 }

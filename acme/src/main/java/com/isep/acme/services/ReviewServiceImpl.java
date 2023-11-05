@@ -17,10 +17,9 @@ import java.util.Optional;
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-    ReviewDataBase reviewDataBase;
-    ProductDataBase productDataBase;
-    UserDataBase userDataBase;
-
+    private final ReviewDataBase reviewDataBase;
+    private final ProductDataBase productDataBase;
+    private final UserDataBase userDataBase;
 
     @Autowired
     UserService userService;
@@ -66,7 +65,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (funfact == null) return null;
 
-        Review review = new Review(createReviewDTO.getReviewText(), date, product.get(), funfact, rating, user.get());
+        Review review = new Review(createReviewDTO.getUserID(), createReviewDTO.getReviewText(), date, product.get(), funfact, rating, user.get());
 
         review = reviewDataBase.create(review);
 

@@ -23,16 +23,24 @@ public class Rating {
         setRate(rate);
     }
 
+    public Rating(Double rate) {
+        setRate(rate);
+    }
+
     public Long getIdRating() {
         return idRating;
+    }
+
+    public void setIdRating(Long idRating) {
+        this.idRating = idRating;
     }
 
     public long getVersion() {
         return version;
     }
 
-    public Rating(Double rate) {
-        setRate(rate);
+    public void setVersion(long version) {
+        this.version = version;
     }
 
     public Double getRate() {

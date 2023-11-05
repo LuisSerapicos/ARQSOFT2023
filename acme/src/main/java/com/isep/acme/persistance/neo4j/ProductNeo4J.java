@@ -1,19 +1,21 @@
 package com.isep.acme.persistance.neo4j;
 
+import com.isep.acme.model.Product;
 import com.isep.acme.model.ProductDTO;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@Node("Product")
+@Node("ProductNeo4J")
 public class ProductNeo4J {
 
     @Id
     @GeneratedValue
-    private Long productID;
+    private Long id;
+
+    private Long productId;
 
     public String sku;
 
@@ -26,13 +28,13 @@ public class ProductNeo4J {
 
     protected ProductNeo4J(){}
 
-    public ProductNeo4J(final Long productID, final String sku) {
-        this.productID = Objects.requireNonNull(productID);
+    public ProductNeo4J(final Long id, final String sku) {
+        this.productId = Objects.requireNonNull(id);
         setSku(sku);
     }
 
-    public ProductNeo4J(final Long productID, final String sku, final String designation, final String description) {
-        this(productID, sku);
+    public ProductNeo4J(final Long id, final String sku, final String designation, final String description) {
+        this(id, sku);
         setDescription(description);
         setDesignation(designation);
     }
@@ -45,6 +47,10 @@ public class ProductNeo4J {
         this(sku);
         setDescription(description);
         setDesignation(designation);
+    }
+
+    public void setProductID(Long id) {
+        this.productId = id;
     }
 
     public void setSku(String sku) {
@@ -99,11 +105,15 @@ public class ProductNeo4J {
     }
 
     public Long getProductID() {
-        return productID;
+        return productId;
     }
 
     public ProductDTO toDto() {
         return new ProductDTO(this.sku, this.designation);
+    }
+
+    public Product toProduct(){
+        return new Product(this.productId, this.sku, this.designation, this.description);
     }
 /*
     public List<Review> getReview() {
