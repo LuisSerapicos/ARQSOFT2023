@@ -1,15 +1,20 @@
 package com.isep.acme.repositories;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-
 import com.isep.acme.model.AggregatedRating;
 import com.isep.acme.model.Product;
+import com.isep.acme.repositories.databases.AggregatedRatingDataBase;
+import org.springframework.stereotype.Component;
+
 import java.util.Optional;
+@Component
+public class AggregatedRatingRepository implements AggregatedRatingDataBase {
+    @Override
+    public Optional<AggregatedRating> findByProductId(Product product) {
+        return null;
+    }
 
-public interface AggregatedRatingRepository extends CrudRepository<AggregatedRating, Long> {
-
-    @Query("SELECT a FROM AggregatedRating a WHERE a.product=:product")
-    Optional<AggregatedRating> findByProductId(Product product);
-
+    @Override
+    public AggregatedRating create(AggregatedRating rating) {
+        return null;
+    }
 }

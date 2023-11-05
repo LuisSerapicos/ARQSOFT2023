@@ -3,7 +3,7 @@ package com.isep.acme.services;
 import com.isep.acme.model.Product;
 import com.isep.acme.model.ProductDTO;
 import com.isep.acme.model.ProductDetailDTO;
-import com.isep.acme.repositories.ProductDataBase;
+import com.isep.acme.repositories.databases.ProductDataBase;
 
 import com.isep.acme.sku.SkuGenerator;
 import org.springframework.beans.factory.annotation.Autowired;

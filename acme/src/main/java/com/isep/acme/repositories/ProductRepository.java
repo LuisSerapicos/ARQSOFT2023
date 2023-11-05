@@ -1,15 +1,15 @@
 package com.isep.acme.repositories;
 
-import org.springframework.stereotype.Component;
-
 import com.isep.acme.model.Product;
+import com.isep.acme.persistance.mongodb.ProductMongo;
+import com.isep.acme.repositories.databases.ProductDataBase;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component("sql")
 public class ProductRepository implements ProductDataBase {
-
 
     @Override
     public Product updateBySku(String sku, Product updatedProduct) {
@@ -26,6 +26,10 @@ public class ProductRepository implements ProductDataBase {
         return null;
     }
 
+    @Override
+    public ProductMongo toProductMongo(Product product) {
+        return null;
+    }
 
     @Override
     public Product saveProduct(Product product) {
@@ -50,7 +54,6 @@ public class ProductRepository implements ProductDataBase {
 
     @Override
     public void deleteBySku(String sku) {
-
     }
 
     @Override

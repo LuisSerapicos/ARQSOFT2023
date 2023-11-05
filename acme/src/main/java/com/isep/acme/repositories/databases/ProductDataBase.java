@@ -1,9 +1,10 @@
-package com.isep.acme.repositories;
+package com.isep.acme.repositories.databases;
 
 import com.isep.acme.model.Product;
+import com.isep.acme.persistance.mongodb.ProductMongo;
 import org.springframework.data.repository.query.Param;
-import java.util.List;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductDataBase {
@@ -23,4 +24,6 @@ public interface ProductDataBase {
     Optional<Product> findById(Long productID);
 
     Product create(Product p);
+
+    ProductMongo toProductMongo(Product product);
 }

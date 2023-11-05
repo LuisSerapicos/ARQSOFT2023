@@ -1,7 +1,7 @@
 package com.isep.acme;
 
 import com.isep.acme.model.Role;
-import com.isep.acme.repositories.UserRepository;
+import com.isep.acme.repositories.databases.UserDataBase;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -10,7 +10,9 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,11 +44,13 @@ import java.security.interfaces.RSAPublicKey;
 import static java.lang.String.format;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = false, jsr250Enabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserRepository userRepo;
+    private UserDataBase userDataBase;
+
+    /*private final UserRepository userRepo;*/
 
     @Value("${jwt.public.key}")
     private RSAPublicKey rsaPublicKey;
@@ -60,9 +64,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${springdoc.swagger-ui.path}")
     private String swaggerPath;
 
+    @Autowired
+    public SecurityConfig(@Value("${user.interface.default}") String beanName2 , ApplicationContext context) {
+        this.userDataBase = context.getBean(beanName2, UserDataBase.class);
+    }
+
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> userRepo.findByUsername(username)
+        auth.userDetailsService(username -> userDataBase.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(format("User: %s, not found", username))));
     }
 
@@ -101,7 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers(HttpMethod.POST, "/uploadMultipleFiles").permitAll()
                 //.antMatchers(HttpMethod.GET, "/fileid").permitAll()
                 // Our private endpoints
-               .antMatchers(HttpMethod.GET,"/admin/user/**").hasRole(Role.Admin)
+               .antMatchers(HttpMethod.GET,"/admin/user/**").permitAll()
                .antMatchers(HttpMethod.POST, "/product/**/reviews/**").hasRole(Role.RegisteredUser)
                .antMatchers(HttpMethod.PUT, "/review/**/vote").hasRole(Role.RegisteredUser)
                .antMatchers(HttpMethod.GET, "/review/pendingreview").hasRole(Role.Mod)

@@ -1,15 +1,26 @@
 package com.isep.acme.repositories;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-
 import com.isep.acme.model.Rating;
+import com.isep.acme.persistance.mongodb.RatingMongo;
+import com.isep.acme.repositories.databases.RatingDataBase;
 
 import java.util.Optional;
 
-public interface RatingRepository extends CrudRepository<Rating, Long> {
+public class RatingRepository implements RatingDataBase {
 
-    @Query("SELECT r FROM Rating r WHERE r.rate=:rate")
-    Optional<Rating> findByRate(Double rate);
+    @Override
+    public Optional<Rating> findByRate(Double rate) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Rating create(Rating rating) {
+        return null;
+    }
+
+    @Override
+    public RatingMongo toRatingMongo(Rating rating) {
+        return null;
+    }
 
 }

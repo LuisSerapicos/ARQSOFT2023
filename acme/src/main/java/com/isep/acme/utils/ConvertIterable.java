@@ -2,10 +2,10 @@ package com.isep.acme.utils;
 
 import java.util.Iterator;
 
-public class ProductIterable<T> implements Iterable<T> {
+public class ConvertIterable<T> implements Iterable<T> {
     private final Iterable<T> iterable;
 
-    public ProductIterable(Iterable<T> iterable) {
+    public ConvertIterable(Iterable<T> iterable) {
         this.iterable = iterable;
     }
 

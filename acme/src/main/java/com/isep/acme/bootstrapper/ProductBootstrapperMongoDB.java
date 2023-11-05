@@ -12,8 +12,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @EnableMongoRepositories("com.isep.acme.repositories.mongodb")
-//@Profile("bootstrap")
+/*@Profile("bootstrap")*/
 public class ProductBootstrapperMongoDB {
+
 
     @Autowired
     private ProductRepositoryMongoDB pRepo;

@@ -48,7 +48,22 @@ public class Review {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private Rating rating;
 
-    protected Review(){}
+    protected Review() {
+    }
+
+    public Review(long version, String approvalStatus, String reviewText, List<Vote> upVote, List<Vote> downVote, String report, LocalDate publishingDate, String funFact, Product product, User user, Rating rating) {
+        this.version = version;
+        this.approvalStatus = approvalStatus;
+        this.reviewText = reviewText;
+        this.upVote = upVote;
+        this.downVote = downVote;
+        this.report = report;
+        this.publishingDate = publishingDate;
+        this.funFact = funFact;
+        this.product = product;
+        this.user = user;
+        this.rating = rating;
+    }
 
     public Review(final Long idReview, final long version, final String approvalStatus, final String reviewText, final LocalDate publishingDate, final String funFact) {
         this.idReview = Objects.requireNonNull(idReview);
@@ -59,12 +74,11 @@ public class Review {
         setFunFact(funFact);
     }
 
-    public Review(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, Product product, Rating rating, User user) {
+    public Review(final Long idReview, final long version, final String approvalStatus, final String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, Product product, Rating rating, User user) {
         this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
 
         setUpVote(upVote);
         setDownVote(downVote);
-        setReport(report);
         setProduct(product);
         setRating(rating);
         setUser(user);
@@ -83,6 +97,32 @@ public class Review {
         this.downVote = new ArrayList<>();
     }
 
+    public Review(Long idReview, final String reviewText, LocalDate publishingDate, Product product, String funFact, Rating rating, User user) {
+        this.idReview = idReview;
+        setReviewText(reviewText);
+        setProduct(product);
+        setPublishingDate(publishingDate);
+        setApprovalStatus("pending");
+        setFunFact(funFact);
+        setRating(rating);
+        setUser(user);
+        this.upVote = new ArrayList<>();
+        this.downVote = new ArrayList<>();
+    }
+
+    public Review(Long idReview, final String reviewText, LocalDate publishingDate, String approvalStatus, Product product, String funFact, Rating rating, User user) {
+        this.idReview = idReview;
+        setReviewText(reviewText);
+        setProduct(product);
+        setPublishingDate(publishingDate);
+        setApprovalStatus(approvalStatus);
+        setFunFact(funFact);
+        setRating(rating);
+        setUser(user);
+        this.upVote = new ArrayList<>();
+        this.downVote = new ArrayList<>();
+    }
+
     public Long getIdReview() {
         return idReview;
     }
@@ -93,10 +133,10 @@ public class Review {
 
     public Boolean setApprovalStatus(String approvalStatus) {
 
-        if( approvalStatus.equalsIgnoreCase("pending") ||
-            approvalStatus.equalsIgnoreCase("approved") ||
-            approvalStatus.equalsIgnoreCase("rejected")) {
-            
+        if (approvalStatus.equalsIgnoreCase("pending") ||
+                approvalStatus.equalsIgnoreCase("approved") ||
+                approvalStatus.equalsIgnoreCase("rejected")) {
+
             this.approvalStatus = approvalStatus;
             return true;
         }
@@ -105,6 +145,10 @@ public class Review {
 
     public String getReviewText() {
         return reviewText;
+    }
+
+    public String getReport() {
+        return report;
     }
 
     public void setReviewText(String reviewText) {
@@ -159,10 +203,11 @@ public class Review {
 
     public void setUser(User user) {
         this.user = user;
+        System.out.println("");
     }
 
     public Rating getRating() {
-        if(rating == null) {
+        if (rating == null) {
             return new Rating(0.0);
         }
         return rating;
@@ -190,10 +235,10 @@ public class Review {
 
     public boolean addUpVote(Vote upVote) {
 
-        if( !this.approvalStatus.equals("approved"))
+        if (!this.approvalStatus.equals("approved"))
             return false;
 
-        if(!this.upVote.contains(upVote)){
+        if (!this.upVote.contains(upVote)) {
             this.upVote.add(upVote);
             return true;
         }
@@ -202,13 +247,17 @@ public class Review {
 
     public boolean addDownVote(Vote downVote) {
 
-        if( !this.approvalStatus.equals( "approved") )
+        if (!this.approvalStatus.equals("approved"))
             return false;
 
-        if(!this.downVote.contains(downVote)){
+        if (!this.downVote.contains(downVote)) {
             this.downVote.add(downVote);
             return true;
         }
         return false;
+    }
+
+    public Review toReview() {
+        return new Review(this.idReview, this.reviewText, this.publishingDate, this.product, this.funFact, this.rating, this.user);
     }
 }

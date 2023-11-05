@@ -23,6 +23,12 @@ public class AggregatedRating {
         this.product = product;
     }
 
+    public AggregatedRating(Long aggregatedId, double average, Product product) {
+        this.aggregatedId = aggregatedId;
+        this.average = average;
+        this.product = product;
+    }
+
     public double getAverage() {
         return average;
     }
