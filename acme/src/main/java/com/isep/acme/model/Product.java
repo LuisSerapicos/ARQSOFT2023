@@ -1,7 +1,6 @@
 package com.isep.acme.model;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class Product {
@@ -25,7 +24,7 @@ public class Product {
     public Product(){}
 
     public Product(final Long productID, final String sku) {
-        this.productID = Objects.requireNonNull(productID);
+        this.productID = productID;
         setSku(sku);
     }
 
@@ -99,6 +98,10 @@ public class Product {
 
     public Long getProductID() {
         return productID;
+    }
+
+    public void setProductID(Long productID) {
+        this.productID = productID;
     }
 
     public ProductDTO toDto() {

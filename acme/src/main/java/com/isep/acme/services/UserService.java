@@ -4,6 +4,7 @@ import com.isep.acme.model.User;
 import com.isep.acme.model.UserView;
 import com.isep.acme.model.UserViewMapper;
 import com.isep.acme.repositories.databases.UserDataBase;
+import com.isep.acme.repositories.databases.UserDataBase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.isep.acme.model.User;
+import com.isep.acme.model.UserView;
+import com.isep.acme.model.UserViewMapper;
 
 import java.util.Optional;
 

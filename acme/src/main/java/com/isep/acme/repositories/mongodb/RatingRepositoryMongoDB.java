@@ -2,6 +2,7 @@ package com.isep.acme.repositories.mongodb;
 
 import com.isep.acme.model.Rating;
 import com.isep.acme.persistance.mongodb.RatingMongo;
+import com.isep.acme.persistance.neo4j.RatingNeo4J;
 import com.isep.acme.repositories.databases.RatingDataBase;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -40,6 +41,11 @@ public class RatingRepositoryMongoDB implements RatingDataBase {
         }
         mongoTemplate.save(save);
         return rating;
+    }
+
+    @Override
+    public RatingNeo4J toRatingNeo4J(Rating rating) {
+        return null;
     }
 
     @Override

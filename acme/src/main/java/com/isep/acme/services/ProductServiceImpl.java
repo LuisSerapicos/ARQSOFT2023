@@ -83,7 +83,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateBySku(String sku, Product product) {
-
         final Optional<Product> productToUpdate = productDataBase.findBySku(sku);
 
         if (productToUpdate.isEmpty()) return null;
@@ -92,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
 
         System.out.println("Sku update"+ sku);
 
-        Product productUpdated = productDataBase.updateProduct(productToUpdate.get());
+        Product productUpdated = productDataBase.updateProduct(sku, productToUpdate.get());
 
         return productUpdated.toDto();
     }

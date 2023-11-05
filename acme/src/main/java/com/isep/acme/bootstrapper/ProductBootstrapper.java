@@ -1,14 +1,11 @@
 package com.isep.acme.bootstrapper;
 
-import com.isep.acme.persistance.neo4j.ProductNeo4J;
-import com.isep.acme.repositories.neo4j.ProductRepositoryNeo4J;
+import com.isep.acme.model.Product;
+import com.isep.acme.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.stereotype.Component;
-
-import com.isep.acme.model.Product;
-import com.isep.acme.repositories.ProductRepository;
 
 @Component
 @EnableNeo4jRepositories

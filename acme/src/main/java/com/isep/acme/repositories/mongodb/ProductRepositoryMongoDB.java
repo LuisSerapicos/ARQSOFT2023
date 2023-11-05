@@ -5,6 +5,9 @@ import com.isep.acme.model.Product;
 import com.isep.acme.persistance.mongodb.ProductMongo;
 import com.isep.acme.repositories.databases.ProductDataBase;
 import com.isep.acme.utils.ConvertIterable;
+import com.isep.acme.persistance.neo4j.ProductNeo4J;
+import com.isep.acme.repositories.databases.ProductDataBase;
+import com.isep.acme.utils.ConvertIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -48,7 +51,7 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
     }
 
     @Override
-    public Product updateProduct(Product product) {
+    public Product updateProduct(String sku, Product product) {
         if (product == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -98,6 +101,11 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
 
     @Override
     public Product create(Product p) {
+        return null;
+    }
+
+    @Override
+    public ProductNeo4J toProductNeo4J(Product product) {
         return null;
     }
 

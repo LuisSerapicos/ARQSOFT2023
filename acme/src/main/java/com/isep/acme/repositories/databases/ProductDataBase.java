@@ -1,6 +1,7 @@
 package com.isep.acme.repositories.databases;
 
 import com.isep.acme.model.Product;
+import com.isep.acme.persistance.neo4j.ProductNeo4J;
 import com.isep.acme.persistance.mongodb.ProductMongo;
 import org.springframework.data.repository.query.Param;
 
@@ -11,7 +12,7 @@ public interface ProductDataBase {
 
     Product saveProduct(Product product);
 
-    Product updateProduct(Product product);
+    Product updateProduct(String sku, Product product);
 
     Optional<Product> findBySku(String sku);
     Iterable<Product> getCatalog();
@@ -26,4 +27,6 @@ public interface ProductDataBase {
     Product create(Product p);
 
     ProductMongo toProductMongo(Product product);
+
+    ProductNeo4J toProductNeo4J(Product product);
 }

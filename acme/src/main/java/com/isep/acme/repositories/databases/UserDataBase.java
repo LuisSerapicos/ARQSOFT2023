@@ -2,6 +2,7 @@ package com.isep.acme.repositories.databases;
 
 import com.isep.acme.model.User;
 import com.isep.acme.persistance.mongodb.UserMongo;
+import com.isep.acme.persistance.neo4j.UserNeo4J;
 
 import java.util.Optional;
 
@@ -16,4 +17,6 @@ public interface UserDataBase {
     Optional<User> findByUsername(String username);
 
     UserMongo toUserMongo(User user);
+
+    UserNeo4J toUserNeo4J(User user);
 }

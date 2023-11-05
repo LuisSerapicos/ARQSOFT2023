@@ -14,7 +14,7 @@ public class Neo4JConfig {
                 .uri("neo4j://localhost:7687") // Neo4j URI
                 .credentials("neo4j", "12345678") // Neo4j credentials
                 .database("ACME")
-                .build(), "com.isep.acme.persistance.neo4j.ProductNeo4J");
+                .build(), "com.isep.acme.persistance.neo4j.*");
     }
 
     @Bean

@@ -1,25 +1,23 @@
 package com.isep.acme.repositories.neo4j;
 
 import com.isep.acme.model.Product;
+import com.isep.acme.persistance.mongodb.ProductMongo;
 import com.isep.acme.persistance.neo4j.ProductNeo4J;
-import com.isep.acme.repositories.DataBase;
-import com.isep.acme.repositories.ProductRepository;
-import org.neo4j.ogm.session.Session;
+import com.isep.acme.repositories.databases.ProductDataBase;
+import com.isep.acme.utils.ConvertIterable;
 import org.neo4j.ogm.model.Result;
+import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import com.isep.acme.utils.ProductIterable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
-import java.util.stream.StreamSupport;
 
 
 @Component("neo4J")
-public class ProductRepositoryNeo4J implements DataBase {
+public class ProductRepositoryNeo4J implements ProductDataBase {
 
     private final Session session;
 
@@ -31,12 +29,12 @@ public class ProductRepositoryNeo4J implements DataBase {
     @Override
     public Optional<Product> findById(Long productID) {
         String cypherQuery = "MATCH (p:ProductNeo4J {id: $productID}) RETURN p";
-        Map<String, Object> parameters = Collections.singletonMap("id", productID);
+        Map<String, Object> parameters = Collections.singletonMap("productID", productID);
         Result result = session.query(cypherQuery, parameters);
 
         for (Map<String, Object> row : result) {
             ProductNeo4J product = (ProductNeo4J) row.get("p");
-            return Optional.ofNullable((toProduct(product)));
+            return Optional.ofNullable((product.toProduct()));
         }
 
         return Optional.empty();
@@ -47,6 +45,11 @@ public class ProductRepositoryNeo4J implements DataBase {
         return null;
     }
 
+    @Override
+    public ProductMongo toProductMongo(Product product) {
+        return null;
+    }
+
     public Optional<Product> findBySku(String sku) {
         String cypherQuery = "MATCH (p:ProductNeo4J {sku: $sku}) RETURN p";
         Map<String, Object> parameters = Collections.singletonMap("sku", sku);
@@ -54,7 +57,7 @@ public class ProductRepositoryNeo4J implements DataBase {
 
         for (Map<String, Object> row : result) {
             ProductNeo4J product = (ProductNeo4J) row.get("p");
-            return Optional.ofNullable((toProduct(product)));
+            return Optional.ofNullable((product.toProduct()));
         }
 
         return Optional.empty();
@@ -63,12 +66,24 @@ public class ProductRepositoryNeo4J implements DataBase {
     public Product saveProduct(Product product) {
         ProductNeo4J save = toProductNeo4J(product);
 
-        Random random = new Random();
-        Long randomId = -1 - Math.abs(random.nextLong() % 1000);
-        save.setProductID(randomId);
-
         session.save(save);
         return product;
+    }
+
+    @Override
+    public Product updateProduct(String sku, Product updatedProduct) {
+        String cypherQuery = "MATCH (p:ProductNeo4J {sku: $sku}) SET p = $updatedProduct RETURN p";
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("sku", sku);
+        parameters.put("updatedProduct", updatedProduct);
+        Result result = session.query(cypherQuery, parameters);
+
+        for (Map<String, Object> row : result) {
+            ProductNeo4J productNeo4J = (ProductNeo4J) row.get("p");
+            return productNeo4J.toProduct();
+        }
+
+        return null;
     }
 
     @Override
@@ -79,7 +94,7 @@ public class ProductRepositoryNeo4J implements DataBase {
 
         for (Map<String, Object> row : result) {
             ProductNeo4J product = (ProductNeo4J) row.get("p");
-            return List.of((toProduct(product)));
+            return List.of((product.toProduct()));
         }
 
         return List.of();
@@ -87,17 +102,6 @@ public class ProductRepositoryNeo4J implements DataBase {
 
     @Override
     public Product updateBySku(String sku, Product updatedProduct) {
-        String cypherQuery = "MATCH (p:ProductNeo4J {sku: $sku}) SET p = $updatedProduct RETURN p";
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("sku", sku);
-        parameters.put("updatedProduct", updatedProduct);
-        Result result = session.query(cypherQuery, parameters);
-
-        for (Map<String, Object> row : result) {
-            ProductNeo4J product = (ProductNeo4J) row.get("p");
-            return toProduct(product);
-        }
-
         return null;
     }
 
@@ -109,11 +113,11 @@ public class ProductRepositoryNeo4J implements DataBase {
             throw(new ResponseStatusException(HttpStatus.NOT_FOUND));
         }
 
-        Iterable<ProductNeo4J> productsNeo4J = new ProductIterable<>(result);
+        Iterable<ProductNeo4J> productsNeo4J = new ConvertIterable<>(result);
         System.out.println("productsNeo4J: " + productsNeo4J);
         List<Product> product = new ArrayList<>();
         for (ProductNeo4J pd : productsNeo4J) {
-            product.add(toProduct(pd));
+            product.add(pd.toProduct());
             System.out.println("Product: " + product);
         }
 
@@ -125,11 +129,7 @@ public class ProductRepositoryNeo4J implements DataBase {
         session.query(cypherQuery, parameters);
     }
 
-    public Product toProduct(ProductNeo4J productNeo4J) {
-        return new Product(productNeo4J.getSku(), productNeo4J.getDesignation(), productNeo4J.getDescription());
-    }
-
     public ProductNeo4J toProductNeo4J(Product product) {
-        return new ProductNeo4J(product.getSku(), product.getDesignation(), product.getDescription());
+        return new ProductNeo4J(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
     }
 }

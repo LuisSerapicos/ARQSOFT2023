@@ -73,6 +73,15 @@ public class User implements UserDetails {
         this.morada = morada;
     }
 
+    public User(final Long userId, final String username, final String password, final String fullName, final String nif, final String morada) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        setNif(nif);
+        this.morada = morada;
+    }
+
     public void addAuthority(Role r) {
         authorities.add(r);
     }

@@ -1,5 +1,9 @@
 package com.isep.acme.repositories;
 
+import com.isep.acme.persistance.neo4j.ProductNeo4J;
+import com.isep.acme.repositories.databases.ProductDataBase;
+import org.springframework.stereotype.Component;
+
 import com.isep.acme.model.Product;
 import com.isep.acme.persistance.mongodb.ProductMongo;
 import com.isep.acme.repositories.databases.ProductDataBase;
@@ -27,6 +31,10 @@ public class ProductRepository implements ProductDataBase {
     }
 
     @Override
+    public ProductNeo4J toProductNeo4J(Product product) {
+        return null;
+    }
+    @Override
     public ProductMongo toProductMongo(Product product) {
         return null;
     }
@@ -37,7 +45,7 @@ public class ProductRepository implements ProductDataBase {
     }
 
     @Override
-    public Product updateProduct(Product product) {
+    public Product updateProduct(String sku, Product product) {
         return null;
     }
 
