@@ -1,34 +1,34 @@
 package com.isep.acme.repositories;
 
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
-
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import com.isep.acme.controllers.ResourceNotFoundException;
 import com.isep.acme.model.User;
+import com.isep.acme.persistance.mongodb.UserMongo;
+import com.isep.acme.repositories.databases.UserDataBase;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Repository
+
 @CacheConfig(cacheNames = "users")
-public interface UserRepository extends CrudRepository<User, Long> {
+@Component("sql1")
+public class UserRepository implements UserDataBase {
+
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(key = "#p0.userId", condition = "#p0.userId != null"),
-            @CacheEvict(key = "#p0.username", condition = "#p0.username != null") })
-    <S extends User> S save(S entity);
+    public <S extends User> S saveUser(S entity) {
+        return null;
+    }
 
     @Override
     @Cacheable
-    Optional<User> findById(Long userId);
+    public Optional<User> findById(Long userId){
+     return null;
+    }
 
     @Cacheable
-    default User getById(final Long userId){
+    public User getById(final Long userId){
         final Optional<User> optionalUser = findById(userId);
 
         if(optionalUser.isEmpty()){
@@ -41,7 +41,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
     }
 
     @Cacheable
-    Optional<User> findByUsername(String username);
+    public Optional<User> findByUsername(String username){
+        return null;
+    }
 
-
+    @Override
+    public UserMongo toUserMongo(User user) {
+        return null;
+    }
 }

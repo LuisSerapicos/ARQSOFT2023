@@ -1,23 +1,27 @@
 package com.isep.acme.controllers;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-
 import com.isep.acme.model.UserView;
 import com.isep.acme.services.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/admin/user")
-@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/{userId}")
     public UserView getUser(@PathVariable final Long userId) {
-
+        System.out.println(userId);
         return userService.getUser(userId);
     }
 

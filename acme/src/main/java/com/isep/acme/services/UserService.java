@@ -1,16 +1,17 @@
 package com.isep.acme.services;
 
+import com.isep.acme.model.User;
+import com.isep.acme.model.UserView;
+import com.isep.acme.model.UserViewMapper;
+import com.isep.acme.repositories.databases.UserDataBase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.isep.acme.model.User;
-import com.isep.acme.model.UserView;
-import com.isep.acme.model.UserViewMapper;
-import com.isep.acme.repositories.UserRepository;
 
 import java.util.Optional;
 
@@ -19,22 +20,28 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private final UserRepository userRepo;
-    @Autowired
+
+    private final UserDataBase userDataBase;
+
     private final UserViewMapper userViewMapper;
+
+    @Autowired
+    public UserService(@Value("${user.interface.default}") String beanName2 , ApplicationContext context, UserViewMapper userViewMapper) {
+        this.userViewMapper = userViewMapper;
+        this.userDataBase = context.getBean(beanName2, UserDataBase.class);
+    }
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        return userRepo.findByUsername(username).orElseThrow(
+        return userDataBase.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("User with username - %s, not found", username)));
     }
 
     public UserView getUser(final Long userId){
-        return userViewMapper.toUserView(userRepo.getById(userId));
+        return userViewMapper.toUserView(userDataBase.getById(userId));
     }
 
     public Optional<User> getUserId(Long user) {
-        return userRepo.findById(user);
+        return userDataBase.findById(user);
     }
 }

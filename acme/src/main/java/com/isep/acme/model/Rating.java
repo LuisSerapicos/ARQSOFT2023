@@ -1,13 +1,10 @@
 package com.isep.acme.model;
 
 
-
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class Rating {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idRating;
@@ -21,9 +18,17 @@ public class Rating {
     protected Rating(){}
 
     public Rating(Long idRating, long version, Double rate) {
-        this.idRating = Objects.requireNonNull(idRating);
-        this.version = Objects.requireNonNull(version);
+        this.idRating = idRating;
+        this.version = version;
         setRate(rate);
+    }
+
+    public Long getIdRating() {
+        return idRating;
+    }
+
+    public long getVersion() {
+        return version;
     }
 
     public Rating(Double rate) {

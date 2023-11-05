@@ -1,32 +1,63 @@
 package com.isep.acme.repositories;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-
 import com.isep.acme.model.Product;
 import com.isep.acme.model.Review;
 import com.isep.acme.model.User;
+import com.isep.acme.repositories.databases.ReviewDataBase;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ReviewRepository extends CrudRepository<Review, Long> {
+public class ReviewRepository implements ReviewDataBase {
 
     //Optional<Review> findById(Long productId);
+    @Override
+    public Iterable<Review> getAllReview() {
+        return null;
+    }
 
-    @Query("SELECT r FROM Review r WHERE r.product=:product ORDER BY r.publishingDate DESC")
-    Optional<List<Review>> findByProductId(Product product);
+    @Override
+    public Review create(Review review) {
+        return null;
+    }
 
+    @Override
+    public Review updateApprovalStatus(Review review) {
+        return null;
+    }
 
-    @Query("SELECT r FROM Review r WHERE r.approvalStatus='pending'")
-    Optional<List<Review>> findPendingReviews();
+    @Override
+    public Review updateVote(Review review, String voteType) {
+        return null;
+    }
 
-    @Query("SELECT r FROM Review r WHERE r.approvalStatus='active'")
-    Optional<List<Review>> findActiveReviews();
+    @Override
+    public Optional<List<Review>> findByProductIdStatus(Product product, String status) {
+        return Optional.empty();
+    }
 
-    @Query("SELECT r FROM Review r WHERE r.product=:product AND r.approvalStatus=:status ORDER BY r.publishingDate DESC")
-    Optional<List<Review>> findByProductIdStatus(Product product, String status);
+    @Override
+    public Optional<Review> findById(Long reviewID) {
+        return Optional.empty();
+    }
 
-    @Query("SELECT r FROM Review r WHERE r.user=:user ORDER BY r.publishingDate DESC")
-    Optional<List<Review>> findByUserId(User user);
+    @Override
+    public Optional<List<Review>> findByProductId(Product product) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void delete(Review r) {
+
+    }
+
+    @Override
+    public Optional<List<Review>> findPendingReviews() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<Review>> findByUserId(User user) {
+        return Optional.empty();
+    }
 }

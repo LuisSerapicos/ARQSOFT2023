@@ -30,7 +30,8 @@ public class Product {
     }
 
     public Product(final Long productID, final String sku, final String designation, final String description) {
-        this(productID, sku);
+        this.productID= productID;
+        this.sku = sku;
         setDescription(description);
         setDesignation(designation);
     }

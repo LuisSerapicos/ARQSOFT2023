@@ -4,24 +4,21 @@ import com.isep.acme.model.Product;
 import com.isep.acme.model.ProductDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-
 import java.util.Objects;
+
+import static com.isep.acme.utils.Generator.generateLongID;
 
 @Document(collection = "product")
 @Data
 @NoArgsConstructor
 public class ProductMongo{
 
-
-    private ObjectId productID;
-
+    @Field(value = "productID")
+    private Long productID;
 
     @Indexed(unique = true)
     @Field(value = "sku")
@@ -33,24 +30,21 @@ public class ProductMongo{
     @Field(value = "description")
     private String description;
 
-
-    public ProductMongo(final ObjectId productID, final String sku, final String designation, final String description) {
-        this(productID, sku);
-        setDescription(description);
-        setDesignation(designation);
-    }
-
     public ProductMongo(final String sku) {
+        productID = generateLongID();
         setSku(sku);
     }
 
-    public ProductMongo(final String sku, final String designation, final String description) {
+    public ProductMongo(Long productID, final String sku, final String designation, final String description) {
         this(sku);
+        this.productID = productID;
         setDescription(description);
         setDesignation(designation);
     }
 
-    public ProductMongo(final ObjectId productID, final String sku) {
+
+
+    public ProductMongo(final Long productID, final String sku) {
         this.productID = Objects.requireNonNull(productID);
         setSku(sku);
     }
@@ -106,7 +100,7 @@ public class ProductMongo{
         setDescription(p.description);
     }
 
-    public ObjectId getProductID() {
+    public Long getProductID() {
         return productID;
     }
 
@@ -115,7 +109,7 @@ public class ProductMongo{
     }
 
     public Product toProduct(){
-        return new Product(this.sku,this.designation,this.description);
+        return new Product(this.productID, this.sku,this.designation,this.description);
     }
 
 

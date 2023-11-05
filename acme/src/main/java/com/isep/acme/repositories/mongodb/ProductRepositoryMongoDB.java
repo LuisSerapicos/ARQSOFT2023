@@ -3,15 +3,15 @@ package com.isep.acme.repositories.mongodb;
 
 import com.isep.acme.model.Product;
 import com.isep.acme.persistance.mongodb.ProductMongo;
-import com.isep.acme.repositories.ProductDataBase;
-import com.isep.acme.utils.ProductIterable;
+import com.isep.acme.repositories.databases.ProductDataBase;
+import com.isep.acme.utils.ConvertIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -65,10 +65,6 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
-    private ProductMongo toProductMongo(Product product) {
-        return new ProductMongo(product.sku, product.getDesignation(), product.getDescription());
-    }
-
     public Optional<Product> findBySku(String sku) {
         Query query = new Query(Criteria.where("sku").is(sku));
         ProductMongo product = mongoTemplate.findOne(query, ProductMongo.class);
@@ -88,7 +84,7 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
             System.out.println("Product don't exist");
             return null;
         }
-        Iterable<ProductMongo> productIterableMongo = new ProductIterable<>(productMongo);
+        Iterable<ProductMongo> productIterableMongo = new ConvertIterable<>(productMongo);
         List<Product> product = new ArrayList<>();
         for (ProductMongo pd : productIterableMongo) {
             product.add(pd.toProduct());
@@ -103,6 +99,11 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
     @Override
     public Product create(Product p) {
         return null;
+    }
+
+    @Override
+    public ProductMongo toProductMongo(Product product) {
+        return new ProductMongo(product.getProductID(), product.sku, product.getDesignation(), product.getDescription());
     }
 
     @Override
@@ -132,7 +133,5 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
     public Product updateBySku(String sku, Product updatedProduct) {
         return null;
     }
-
-    ;
 
 }

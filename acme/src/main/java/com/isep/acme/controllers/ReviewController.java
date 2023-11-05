@@ -20,6 +20,14 @@ class ReviewController {
     @Autowired
     private ReviewService rService;
 
+    @GetMapping("/reviews/all")
+    public ResponseEntity<Iterable<Review>> findAll() {
+
+        final var review = rService.getAll();
+
+        return ResponseEntity.ok().body( review );
+    }
+
     @Operation(summary = "finds a product through its sku and shows its review by status")
     @GetMapping("/products/{sku}/reviews/{status}")
     public ResponseEntity<List<ReviewDTO>> findById(@PathVariable(value = "sku") final String sku, @PathVariable(value = "status") final String status) {
