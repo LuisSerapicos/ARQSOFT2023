@@ -37,7 +37,7 @@ public class ReviewRepositoryMongoDB implements ReviewDataBase {
     private final RatingDataBase ratingDataBase;
 
     @Autowired
-    public ReviewRepositoryMongoDB(MongoTemplate mongoTemplate, @Value("${database.interface.default}") String beanName2, @Value("${user.interface.default}") String beanName3, @Value("${rating.interface.default}")String beanName4, ApplicationContext context) {
+    public ReviewRepositoryMongoDB(MongoTemplate mongoTemplate, @Value("${database.interface.default}") String beanName2, @Value("${user.interface.default}") String beanName3, @Value("${rating.interface.default}") String beanName4, ApplicationContext context) {
         this.mongoTemplate = mongoTemplate;
         this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
         this.userDataBase = context.getBean(beanName3, UserDataBase.class);
@@ -96,20 +96,20 @@ public class ReviewRepositoryMongoDB implements ReviewDataBase {
 
     @Override
     public Review updateVote(Review review, String voteType) {
-            ReviewMongo save = toReviewMongoUpdate(review);
-            if (findById(save.getIdReview()).isPresent()) {
-                Query query = new Query(Criteria.where("idReview").is(save.getIdReview()));
-                Update update = new Update();
-                if(voteType.equalsIgnoreCase("upVote")){
-                    save.setUpVote(review.getUpVote());
-                    update.set(voteType, save.getUpVote());
-                }else{
-                    save.setDownVote(review.getDownVote());
-                    update.set(voteType, save.getDownVote());
-                }
-                mongoTemplate.updateFirst(query, update, ReviewMongo.class);
-                return review;
+        ReviewMongo save = toReviewMongoUpdate(review);
+        if (findById(save.getIdReview()).isPresent()) {
+            Query query = new Query(Criteria.where("idReview").is(save.getIdReview()));
+            Update update = new Update();
+            if (voteType.equalsIgnoreCase("upVote")) {
+                save.setUpVote(review.getUpVote());
+                update.set(voteType, save.getUpVote());
+            } else {
+                save.setDownVote(review.getDownVote());
+                update.set(voteType, save.getDownVote());
             }
+            mongoTemplate.updateFirst(query, update, ReviewMongo.class);
+            return review;
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
@@ -193,7 +193,18 @@ public class ReviewRepositoryMongoDB implements ReviewDataBase {
 
     @Override
     public Optional<List<Review>> findByApprovalStatus(String status) {
-        return Optional.empty();
+        Query query = new Query(Criteria.where("approvalStatus").is(status));
+        List<ReviewMongo> reviewMongo = mongoTemplate.find(query, ReviewMongo.class);
+        if (reviewMongo == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        List<Review> review = new ArrayList<>();
+        for (ReviewMongo pd : reviewMongo) {
+            review.add(pd.toReview());
+        }
+
+        return Optional.of(review);
+
     }
 
     private ReviewMongo toReviewMongo(Review review) {
@@ -204,7 +215,7 @@ public class ReviewRepositoryMongoDB implements ReviewDataBase {
         return new ReviewMongo(review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), productDataBase.toProductMongo(review.getProduct()), userDataBase.toUserMongo(review.getUser()), ratingDataBase.toRatingMongo(review.getRating()));
     }
 
-    private ReviewMongo toReviewMongoUpdate(Review review){
-        return new ReviewMongo(review.getIdReview(),review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), productDataBase.toProductMongo(review.getProduct()), userDataBase.toUserMongo(review.getUser()), ratingDataBase.toRatingMongo(review.getRating()));
+    private ReviewMongo toReviewMongoUpdate(Review review) {
+        return new ReviewMongo(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), productDataBase.toProductMongo(review.getProduct()), userDataBase.toUserMongo(review.getUser()), ratingDataBase.toRatingMongo(review.getRating()));
     }
 }
