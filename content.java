@@ -1,5 +1,5 @@
-public class Cfnwkn {
+public class Cyjpac {
     public static void main() {
-        System.out.println("vyynl");
+        System.out.println("mengx");
     }
 }
