@@ -1,5 +1,5 @@
-public class Csjroc {
+public class Ctcnym {
     public static void main() {
-        System.out.println("dmxgh");
+        System.out.println("dpwnm");
     }
 }
