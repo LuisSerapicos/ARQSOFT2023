@@ -283,6 +283,37 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
             return Optional.empty();
     }
 
+    @Override
+    public Optional<List<Review>> findByApprovalStatus(String status) {
+        String cypherQuery = "MATCH (p:ReviewNeo4J {approvalStatus: $status})" +
+                "OPTIONAL MATCH (p)-[:PRODUCT]->(product:ProductNeo4J)\n" +
+                "OPTIONAL MATCH (p)-[:USER]->(user:UserNeo4J)\n" +
+                "OPTIONAL MATCH (p)-[:RATING]->(rating:RatingNeo4J)\n" +
+                "RETURN p, product, user, rating";
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("status", status);
+        Result result = session.query(cypherQuery, parameters);
+
+        List<Review> reviews = new ArrayList<>();
+
+        for (Map<String, Object> row : result) {
+            ReviewNeo4J reviewNeo4J = (ReviewNeo4J) row.get("r");
+            ProductNeo4J productNeo4J = (ProductNeo4J) row.get("product");
+            UserNeo4J userNeo4J = (UserNeo4J) row.get("user");
+            RatingNeo4J ratingNeo4J = (RatingNeo4J) row.get("rating");
+            reviewNeo4J.setProduct(productNeo4J);
+            reviewNeo4J.setUser(userNeo4J);
+            reviewNeo4J.setRating(ratingNeo4J);
+
+            reviews.add(reviewNeo4J.toReview());
+        }
+
+        if(!reviews.isEmpty())
+            return Optional.of(reviews);
+        else
+            return Optional.empty();
+    }
+
     public ReviewNeo4J toReviewNeo4J(Review review) {
         return new ReviewNeo4J(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), "report", review.getPublishingDate(), review.getFunFact(), productDataBase.toProductNeo4J(review.getProduct()), ratingDataBase.toRatingNeo4J(review.getRating()), userDataBase.toUserNeo4J(review.getUser()));
     }

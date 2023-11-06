@@ -1,14 +1,16 @@
 package com.isep.acme.services;
 
-import java.util.List;
-
 import com.isep.acme.model.*;
+
+import java.util.List;
 
 public interface ReviewService {
 
     Iterable<Review> getAll();
 
     List<ReviewDTO> getReviewsOfProduct(String sku, String status);
+
+    Iterable<ReviewDTO> getRecommendedReviews(Long userId);
 
     ReviewDTO create(CreateReviewDTO createReviewDTO, String sku);
 

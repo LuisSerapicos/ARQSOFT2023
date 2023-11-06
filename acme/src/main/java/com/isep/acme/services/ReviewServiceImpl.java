@@ -5,6 +5,7 @@ import com.isep.acme.model.*;
 import com.isep.acme.repositories.databases.ProductDataBase;
 import com.isep.acme.repositories.databases.ReviewDataBase;
 import com.isep.acme.repositories.databases.UserDataBase;
+import com.isep.acme.review.ReviewGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -20,6 +21,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewDataBase reviewDataBase;
     private final ProductDataBase productDataBase;
     private final UserDataBase userDataBase;
+    private final ReviewGenerator reviewGenerator;
 
     @Autowired
     UserService userService;
@@ -36,12 +38,26 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Autowired
-    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, @Value("${database.interface.default}") String beanName2, @Value("${user.interface.default}") String beanName3, ApplicationContext context) {
+    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, @Value("${database.interface.default}") String beanName2, @Value("${user.interface.default}") String beanName3, @Value("${recommendation.alg}") String reviewBeanName, ApplicationContext context) {
         this.reviewDataBase = context.getBean(beanName, ReviewDataBase.class);
         this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
         this.userDataBase = context.getBean(beanName3, UserDataBase.class);
+        this.reviewGenerator = context.getBean(reviewBeanName, ReviewGenerator.class);
     }
 
+    @Override
+    public Iterable<ReviewDTO> getRecommendedReviews(Long userId)
+    {
+        final Optional<User> user = userDataBase.findById(userId);
+
+        if(user.isEmpty()) return null;
+
+        Optional<List<Review>> r = reviewDataBase.findByUserId(user.get());
+
+        if (r.isEmpty()) return null;
+
+        return reviewGenerator.getRecommendedReviews(userId);
+    }
 
     @Override
     public ReviewDTO create(final CreateReviewDTO createReviewDTO, String sku) {

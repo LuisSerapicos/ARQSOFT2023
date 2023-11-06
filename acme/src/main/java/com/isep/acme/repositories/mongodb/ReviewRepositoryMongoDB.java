@@ -191,6 +191,11 @@ public class ReviewRepositoryMongoDB implements ReviewDataBase {
         return Optional.of(review);
     }
 
+    @Override
+    public Optional<List<Review>> findByApprovalStatus(String status) {
+        return Optional.empty();
+    }
+
     private ReviewMongo toReviewMongo(Review review) {
         return new ReviewMongo(review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), review.getReport(), review.getPublishingDate(), review.getFunFact(), productDataBase.toProductMongo(review.getProduct()), userDataBase.toUserMongo(review.getUser()), ratingDataBase.toRatingMongo(review.getRating()));
     }
