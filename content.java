@@ -1,5 +1,5 @@
-public class Ctcnym {
+public class Cmyhwh {
     public static void main() {
-        System.out.println("dpwnm");
+        System.out.println("cmrmd");
     }
 }
