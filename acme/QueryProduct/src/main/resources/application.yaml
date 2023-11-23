@@ -1,0 +1,47 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: productQuery
+  rabbitmq:
+    username: guest
+    password: guest
+    addresses: localhost:5672
+  data:
+    mongodb:
+      uri: mongodb://root:password@localhost:27017/command_product
+      database: query_product
+sku:
+  interface:
+    generator:
+      default: skuA
+
+database:
+  interface:
+    default: mongoDB
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+rabbitmq:
+  exchanges:
+    internal: internal.exchange
+  queues:
+    product: product.queue
+    product2: product2.queue
+  routing-keys:
+    internal-product: internal.product.routing-key
+
+#Generator SKU
+
+#Data Base
+
+
+#Reviews
+recommendation:
+  alg: reviewA
+
