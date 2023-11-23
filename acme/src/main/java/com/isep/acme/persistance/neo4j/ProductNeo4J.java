@@ -57,9 +57,6 @@ public class ProductNeo4J {
         if (sku == null || sku.isBlank()) {
             throw new IllegalArgumentException("SKU is a mandatory attribute of Product.");
         }
-        if (sku.length() != 12) {
-            throw new IllegalArgumentException("SKU must be 12 characters long.");
-        }
 
         this.sku = sku;
     }

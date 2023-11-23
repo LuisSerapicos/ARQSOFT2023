@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO create(final Product product) {
 
-        final Product p = new Product(product.getSku(), product.getDesignation(), product.getDescription());
+        final Product p = new Product(skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
 
         return productDataBase.saveProduct(p).toDto();
     }
