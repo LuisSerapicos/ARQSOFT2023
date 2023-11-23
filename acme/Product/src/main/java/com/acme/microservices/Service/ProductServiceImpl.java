@@ -1,11 +1,9 @@
-package com.isep.acme.services;
+package com.acme.microservices.Service;
 
-import com.isep.acme.model.Product;
-import com.isep.acme.model.ProductDTO;
-import com.isep.acme.model.ProductDetailDTO;
-import com.isep.acme.repositories.databases.ProductDataBase;
-
-import com.isep.acme.sku.SkuGenerator;
+import com.acme.microservices.Model.Product;
+import com.acme.microservices.Model.ProductDTO;
+import com.acme.microservices.Model.ProductDetailDTO;
+import com.acme.microservices.Repositoy.ProductDataBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;

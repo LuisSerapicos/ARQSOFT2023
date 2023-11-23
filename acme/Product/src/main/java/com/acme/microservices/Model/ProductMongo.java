@@ -1,56 +1,43 @@
-package com.isep.acme.persistance.neo4j;
+package com.acme.microservices.Model;
 
 import com.isep.acme.model.Product;
 import com.isep.acme.model.ProductDTO;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.Objects;
+import static com.isep.acme.utils.Generator.generateLongID;
 
-@Node("ProductNeo4J")
-public class ProductNeo4J {
+@Document(collection = "product")
+@Data
+@NoArgsConstructor
+public class ProductMongo{
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Field(value = "productID")
+    private Long productID;
 
-    private Long productId;
-
+    @Indexed(unique = true)
+    @Field(value = "sku")
     public String sku;
 
+    @Field(value = "designation")
     private String designation;
 
+    @Field(value = "description")
     private String description;
-    /*
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Review> review = new ArrayList<Review>(); */
 
-    protected ProductNeo4J(){}
-
-    public ProductNeo4J(final Long id, final String sku) {
-        this.productId = Objects.requireNonNull(id);
+    public ProductMongo(final String sku) {
+        productID = generateLongID();
         setSku(sku);
     }
 
-    public ProductNeo4J(final Long id, final String sku, final String designation, final String description) {
-        this(id, sku);
-        setDescription(description);
-        setDesignation(designation);
-    }
-
-    public ProductNeo4J(final String sku) {
-        setSku(sku);
-    }
-
-    public ProductNeo4J(final String sku, final String designation, final String description) {
+    public ProductMongo(Long productID, final String sku, final String designation, final String description) {
         this(sku);
+        this.productID = productID;
         setDescription(description);
         setDesignation(designation);
-    }
-
-    public void setProductID(Long id) {
-        this.productId = id;
     }
 
     public void setSku(String sku) {
@@ -96,13 +83,13 @@ public class ProductNeo4J {
     }
 
 
-    public void updateProduct(ProductNeo4J p) {
+    public void updateProduct(ProductMongo p) {
         setDesignation(p.designation);
         setDescription(p.description);
     }
 
     public Long getProductID() {
-        return productId;
+        return productID;
     }
 
     public ProductDTO toDto() {
@@ -110,8 +97,10 @@ public class ProductNeo4J {
     }
 
     public Product toProduct(){
-        return new Product(this.productId, this.sku, this.designation, this.description);
+        return new Product(this.productID, this.sku,this.designation,this.description);
     }
+
+
 /*
     public List<Review> getReview() {
         return review;
@@ -121,5 +110,6 @@ public class ProductNeo4J {
         this.review = review;
     }
 */
+
 
 }

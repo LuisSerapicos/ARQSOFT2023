@@ -42,19 +42,9 @@ public class ProductMongo{
         setDesignation(designation);
     }
 
-
-
-    public ProductMongo(final Long productID, final String sku) {
-        this.productID = Objects.requireNonNull(productID);
-        setSku(sku);
-    }
-
     public void setSku(String sku) {
         if (sku == null || sku.isBlank()) {
             throw new IllegalArgumentException("SKU is a mandatory attribute of Product.");
-        }
-        if (sku.length() != 12) {
-            throw new IllegalArgumentException("SKU must be 12 characters long.");
         }
 
         this.sku = sku;

@@ -1,4 +1,4 @@
-package com.isep.acme.model;
+package com.acme.microservices.Model;
 
 import javax.persistence.*;
 

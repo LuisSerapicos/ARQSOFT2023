@@ -1,5 +1,8 @@
-package com.isep.acme.controllers;
+package com.acme.microservices.Controllers;
 
+import com.acme.microservices.Model.Product;
+import com.acme.microservices.Service.ProductService;
+import com.acme.microservices.Model.ProductDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -10,10 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.isep.acme.model.Product;
-import com.isep.acme.model.ProductDTO;
-
-import com.isep.acme.services.ProductService;
 
 import org.springframework.web.bind.annotation.RequestBody;
 

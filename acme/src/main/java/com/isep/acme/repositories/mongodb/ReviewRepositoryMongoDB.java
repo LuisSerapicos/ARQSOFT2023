@@ -1,10 +1,12 @@
 package com.isep.acme.repositories.mongodb;
 
 import com.isep.acme.model.Product;
+import com.isep.acme.model.ProductDTO;
 import com.isep.acme.model.Review;
 import com.isep.acme.model.User;
 import com.isep.acme.persistance.mongodb.ProductMongo;
 import com.isep.acme.persistance.mongodb.ReviewMongo;
+import com.isep.acme.persistance.mongodb.UserMongo;
 import com.isep.acme.repositories.databases.ProductDataBase;
 import com.isep.acme.repositories.databases.RatingDataBase;
 import com.isep.acme.repositories.databases.ReviewDataBase;
@@ -193,7 +195,17 @@ public class ReviewRepositoryMongoDB implements ReviewDataBase {
 
     @Override
     public Optional<List<Review>> findByApprovalStatus(String status) {
-        return Optional.empty();
+        Query query = new Query(Criteria.where("approvalStatus").is(status));
+        List<ReviewMongo> review = mongoTemplate.find(query, ReviewMongo.class);
+        if (review == null) {
+            System.out.println("User don't exist");
+            return Optional.empty();
+        }
+        List<Review> reviewFinal = new ArrayList();
+        for (ReviewMongo pd : review) {
+            reviewFinal.add(pd.toReview());
+        }
+        return Optional.of(reviewFinal);
     }
 
     private ReviewMongo toReviewMongo(Review review) {
