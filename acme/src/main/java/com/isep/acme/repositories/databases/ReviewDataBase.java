@@ -1,7 +1,5 @@
 package com.isep.acme.repositories.databases;
 
-import com.isep.acme.model.*;
-
 import java.util.List;
 import java.util.Optional;
 
