@@ -26,7 +26,7 @@ public class SkuGeneratorImplA implements SkuGenerator {
         // Add a special character
         sku.append(generateRandomSpecialCharacter());
 
-        System.out.println(sku);
+        System.out.println("SkuA: " + sku);
         return sku.toString();
     }
 

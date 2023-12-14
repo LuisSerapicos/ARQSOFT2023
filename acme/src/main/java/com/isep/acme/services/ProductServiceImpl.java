@@ -9,7 +9,9 @@ import com.isep.acme.sku.SkuGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,10 +77,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO create(final Product product) {
+        Optional<Product> currentProduct = productDataBase.findBySku(skuType.generateSku(product.getDesignation()));
 
-        final Product p = new Product(product.getSku(), product.getDesignation(), product.getDescription());
+        if (currentProduct.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"Product must have a unique SKU.");
+        }
+        else {
+            final Product p = new Product(skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
 
-        return productDataBase.saveProduct(p).toDto();
+            return productDataBase.saveProduct(p).toDto();
+        }
     }
 
     @Override

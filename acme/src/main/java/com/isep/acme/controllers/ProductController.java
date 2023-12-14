@@ -64,13 +64,8 @@ class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ProductDTO> create(@RequestBody Product manager) {
-        try {
-            final ProductDTO product = service.create(manager);
-            return new ResponseEntity<ProductDTO>(product, HttpStatus.CREATED);
-        }
-        catch( Exception e ) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"Product must have a unique SKU.");
-        }
+        final ProductDTO product = service.create(manager);
+        return new ResponseEntity<ProductDTO>(product, HttpStatus.CREATED);
     }
 
     @Operation(summary = "updates a product")

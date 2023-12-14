@@ -5,6 +5,7 @@ import com.isep.acme.persistance.mongodb.ProductMongo;
 import com.isep.acme.persistance.neo4j.ProductNeo4J;
 import com.isep.acme.repositories.databases.ProductDataBase;
 import com.isep.acme.utils.ConvertIterable;
+import com.isep.acme.utils.RandomLongGenerator;
 import org.neo4j.ogm.model.Result;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,11 @@ public class ProductRepositoryNeo4J implements ProductDataBase {
     }
 
     public Product saveProduct(Product product) {
+        Long randomId = RandomLongGenerator.generateRandomLong();
+        product.setProductID(randomId);
+
         ProductNeo4J save = toProductNeo4J(product);
+        save.setProductID(randomId);
 
         session.save(save);
         return product;

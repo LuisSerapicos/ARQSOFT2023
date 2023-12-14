@@ -28,10 +28,10 @@ public class ReviewNeo4J {
     private String reviewText;
 
     @Relationship(type = "UPVOTED_BY", direction = Relationship.Direction.INCOMING)
-    private List<Vote> upVote;
+    private List<VoteNeo4J> upVote;
 
     @Relationship(type = "DOWNVOTED_BY", direction = Relationship.Direction.INCOMING)
-    private List<Vote> downVote;
+    private List<VoteNeo4J> downVote;
 
     private String report;
 
@@ -59,7 +59,7 @@ public class ReviewNeo4J {
         setFunFact(funFact);
     }
 
-    public ReviewNeo4J(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, ProductNeo4J product, RatingNeo4J rating, UserNeo4J user) {
+    public ReviewNeo4J(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<VoteNeo4J> upVote, final List<VoteNeo4J> downVote, final String report, final LocalDate publishingDate, final String funFact, ProductNeo4J product, RatingNeo4J rating, UserNeo4J user) {
         this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
 
         setUpVote(upVote);
@@ -180,23 +180,23 @@ public class ReviewNeo4J {
         this.rating = rating;
     }
 
-    public List<Vote> getUpVote() {
+    public List<VoteNeo4J> getUpVote() {
         return upVote;
     }
 
-    public void setUpVote(List<Vote> upVote) {
+    public void setUpVote(List<VoteNeo4J> upVote) {
         this.upVote = upVote;
     }
 
-    public List<Vote> getDownVote() {
+    public List<VoteNeo4J> getDownVote() {
         return downVote;
     }
 
-    public void setDownVote(List<Vote> downVote) {
+    public void setDownVote(List<VoteNeo4J> downVote) {
         this.downVote = downVote;
     }
 
-    public boolean addUpVote(Vote upVote) {
+    public boolean addUpVote(VoteNeo4J upVote) {
 
         if( !this.approvalStatus.equals("approved"))
             return false;
@@ -208,7 +208,7 @@ public class ReviewNeo4J {
         return false;
     }
 
-    public boolean addDownVote(Vote downVote) {
+    public boolean addDownVote(VoteNeo4J downVote) {
 
         if( !this.approvalStatus.equals( "approved") )
             return false;
@@ -221,6 +221,30 @@ public class ReviewNeo4J {
     }
 
     public Review toReview(){
-        return new Review(this.getIdReview(), this.getApprovalStatus(), this.getReviewText(), this.getPublishingDate(), this.product.toProduct(), this.getFunFact(), this.rating.toRating(), this.user.toUser());
+        return new Review(this.getIdReview(), this.getVersion(), this.getApprovalStatus(), this.getReviewText(), toVoteNeo4JList(this.getUpVote()), toVoteNeo4JList(this.getDownVote()), this.getReport(), this.getPublishingDate(), this.getFunFact(), this.product.toProduct(), this.rating.toRating(), this.user.toUser());
+    }
+
+    public List<Vote> toVoteNeo4JList(List<VoteNeo4J> vote) {
+        List<Vote> voteList = new ArrayList<>();
+
+        if(vote != null) {
+            if(!vote.isEmpty())
+                for(VoteNeo4J v : vote) {
+                    voteList.add(toVote(v));
+                }
+            else
+                return voteList;
+        }
+        else
+            throw new IllegalArgumentException("Vote list is null");
+
+        return voteList;
+    }
+
+    public Vote toVote(VoteNeo4J vote) {
+        if(vote != null)
+            return new Vote(vote.getVote(), vote.getUserID());
+        else
+            throw new IllegalArgumentException("Vote is null!");
     }
 }
