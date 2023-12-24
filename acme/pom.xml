@@ -18,6 +18,7 @@
     <modules>
         <module>Product</module>
         <module>apigw</module>
+        <module>Review</module>
     </modules>
 
     <properties>
@@ -140,16 +141,6 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-
-
-
-
-
-		<!-- OpenAPI & Swagger UI-->
-
-
-		<!--validation of requests-->
-
 
 		<!-- Lombok to automate setter/getter generation -->
 		<dependency>
