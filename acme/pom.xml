@@ -24,6 +24,8 @@
 		<module>eureka-server</module>
 		<module>User</module>
 	</modules>
+        <module>Review</module>
+    </modules>
 
     <properties>
 		<java.version>19</java.version>
@@ -133,7 +135,6 @@
 				<artifactId>springdoc-openapi-ui</artifactId>
 				<version>1.5.12</version>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
 
