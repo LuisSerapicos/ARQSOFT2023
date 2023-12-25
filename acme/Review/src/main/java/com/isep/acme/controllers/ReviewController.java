@@ -3,6 +3,7 @@ package com.isep.acme.controllers;
 import com.isep.acme.model.CreateReviewDTO;
 import com.isep.acme.model.Review;
 import com.isep.acme.model.ReviewDTO;
+import com.isep.acme.model.VoteReviewDTO;
 import com.isep.acme.services.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,21 +16,14 @@ import java.util.List;
 
 
 @Tag(name = "Review", description = "Endpoints for managing Review")
+@RequestMapping("api/v1/reviews")
 @RestController
 class ReviewController {
 
     @Autowired
     private ReviewService rService;
 
-    @Operation(summary = "recommended reviews")
-    @GetMapping("/reviews/recommended/{userID}")
-    public ResponseEntity<Iterable<ReviewDTO>> recommendedReview(@PathVariable(value = "userID") final Long userID) {
-        final var recommended = rService.getRecommendedReviews(userID);
-
-        return ResponseEntity.ok().body( recommended );
-    }
-
-    @GetMapping("/reviews/all")
+    @GetMapping("/all")
     public ResponseEntity<Iterable<Review>> findAll() {
 
         final var review = rService.getAll();
@@ -47,7 +41,7 @@ class ReviewController {
     }
 
     @Operation(summary = "gets review by user")
-    @GetMapping("/reviews/{userID}")
+    @GetMapping("/{userID}")
     public ResponseEntity<List<ReviewDTO>> findReviewByUser(@PathVariable(value = "userID") final Long userID) {
 
         final var review = rService.findReviewsByUser(userID);
@@ -68,8 +62,8 @@ class ReviewController {
         return new ResponseEntity<ReviewDTO>(review, HttpStatus.CREATED);
     }
 
-    /*@Operation(summary = "add vote")
-    @PutMapping("/reviews/{reviewID}/vote")
+    @Operation(summary = "add vote")
+    @PutMapping("/{reviewID}/vote")
     public ResponseEntity<Boolean> addVote(@PathVariable(value = "reviewID") final Long reviewID, @RequestBody VoteReviewDTO voteReviewDTO){
 
         boolean added = this.rService.addVoteToReview(reviewID, voteReviewDTO);
@@ -79,10 +73,10 @@ class ReviewController {
         }
 
         return new ResponseEntity<Boolean>(added, HttpStatus.CREATED);
-    }*/
+    }
 
     @Operation(summary = "deletes review")
-    @DeleteMapping("/reviews/{reviewID}")
+    @DeleteMapping("/{reviewID}")
     public ResponseEntity<Boolean> deleteReview(@PathVariable(value = "reviewID") final Long reviewID) {
 
         Boolean rev = rService.DeleteReview(reviewID);
@@ -95,7 +89,7 @@ class ReviewController {
     }
 
     @Operation(summary = "gets pedding reviews")
-    @GetMapping("/reviews/pending")
+    @GetMapping("/pending")
     public ResponseEntity<List<ReviewDTO>> getPendingReview(){
 
         List<ReviewDTO> r = rService.findPendingReview();
@@ -104,7 +98,7 @@ class ReviewController {
     }
 
     @Operation(summary = "Accept or reject review")
-    @PutMapping("/reviews/acceptreject/{reviewID}")
+    @PutMapping("/acceptreject/{reviewID}")
     public ResponseEntity<ReviewDTO> putAcceptRejectReview(@PathVariable(value = "reviewID") final Long reviewID, @RequestBody String approved){
 
         try {

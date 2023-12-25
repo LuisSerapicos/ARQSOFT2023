@@ -17,6 +17,11 @@ spring:
           predicates:
             - Path=/api/v1/product/**
             - Method=GET
+        - id: reviewCommandRoute
+          uri: lb://REVIEW
+          predicates:
+            - Path=/api/v1/reviews/**
+            - Method=GET,POST,PUT,DELETE
 eureka:
   client:
     service-url:

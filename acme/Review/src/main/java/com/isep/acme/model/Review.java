@@ -22,11 +22,11 @@ public class Review {
 
     @ElementCollection
     @Column(nullable = true)
-    private List<Long> userUpVoteId;
+    private List<Vote> upVote;
 
     @ElementCollection
     @Column(nullable = true)
-    private List<Long> userDownVoteId;
+    private List<Vote> downVote;
 
     @Column(nullable = true)
     private String report;
@@ -37,27 +37,32 @@ public class Review {
     @Column(nullable = false)
     private String funFact;
 
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    private Long ratingId;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    private Rating rating;
 
     protected Review() {
     }
 
-    public Review(long version, String approvalStatus, String reviewText, List<Long> upVote, List<Long> downVote, String report, LocalDate publishingDate, String funFact, Long product, Long user, Long rating) {
+    public Review(long version, String approvalStatus, String reviewText, List<Vote> upVote, List<Vote> downVote, String report, LocalDate publishingDate, String funFact, Product product, User user, Rating rating) {
         this.version = version;
         this.approvalStatus = approvalStatus;
         this.reviewText = reviewText;
-        this.userUpVoteId = upVote;
-        this.userDownVoteId = downVote;
+        this.upVote = upVote;
+        this.downVote = downVote;
         this.report = report;
         this.publishingDate = publishingDate;
         this.funFact = funFact;
-        this.productId = product;
-        this.userId = user;
-        this.ratingId = rating;
+        this.product = product;
+        this.user = user;
+        this.rating = rating;
     }
 
     public Review(final Long idReview, final long version, final String approvalStatus, final String reviewText, final LocalDate publishingDate, final String funFact) {
@@ -69,7 +74,7 @@ public class Review {
         setFunFact(funFact);
     }
 
-    public Review(final Long idReview, final long version, final String approvalStatus, final String reviewText, final List<Long> upVote, final List<Long> downVote, final String report, final LocalDate publishingDate, final String funFact, Long product, Long rating, Long user) {
+    public Review(final Long idReview, final long version, final String approvalStatus, final String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, Product product, Rating rating, User user) {
         this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
 
         setUpVote(upVote);
@@ -80,7 +85,7 @@ public class Review {
 
     }
 
-    public Review(final Long idReview, final String reviewText, LocalDate publishingDate, Long product, String funFact, Long rating, Long user) {
+    public Review(final Long idReview, final String reviewText, LocalDate publishingDate, Product product, String funFact, Rating rating, User user) {
         setIdReview(idReview);
         setReviewText(reviewText);
         setProduct(product);
@@ -89,11 +94,11 @@ public class Review {
         setFunFact(funFact);
         setRating(rating);
         setUser(user);
-        this.userUpVoteId = new ArrayList<>();
-        this.userDownVoteId = new ArrayList<>();
+        this.upVote = new ArrayList<>();
+        this.downVote = new ArrayList<>();
     }
 
-    public Review(final Long idReview, final String approvalStatus, final String reviewText, LocalDate publishingDate, Long product, String funFact, Long rating, Long user) {
+    public Review(final Long idReview, final String approvalStatus, final String reviewText, LocalDate publishingDate, Product product, String funFact, Rating rating, User user) {
         setIdReview(idReview);
         setReviewText(reviewText);
         setProduct(product);
@@ -102,11 +107,11 @@ public class Review {
         setFunFact(funFact);
         setRating(rating);
         setUser(user);
-        this.userUpVoteId = new ArrayList<>();
-        this.userDownVoteId = new ArrayList<>();
+        this.upVote = new ArrayList<>();
+        this.downVote = new ArrayList<>();
     }
 
-    public Review(Long idReview, final String reviewText, LocalDate publishingDate, String approvalStatus, Long product, String funFact, Long rating, Long user) {
+    public Review(Long idReview, final String reviewText, LocalDate publishingDate, String approvalStatus, Product product, String funFact, Rating rating, User user) {
         this.idReview = idReview;
         setReviewText(reviewText);
         setProduct(product);
@@ -115,8 +120,8 @@ public class Review {
         setFunFact(funFact);
         setRating(rating);
         setUser(user);
-        this.userUpVoteId = new ArrayList<>();
-        this.userDownVoteId = new ArrayList<>();
+        this.upVote = new ArrayList<>();
+        this.downVote = new ArrayList<>();
     }
 
     public Long getIdReview() {
@@ -189,74 +194,74 @@ public class Review {
         this.funFact = funFact;
     }
 
-    public void setProduct(Long product) {
-        this.productId = product;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public Long getProduct() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public Long getUser() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(Long user) {
-        this.userId = user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Long getRating() {
-        /*if (ratingId == null) {
-            return new Long(0.0);
-        }*/
-        return ratingId;
+    public Rating getRating() {
+        if (rating == null) {
+            return new Rating(0.0);
+        }
+        return rating;
     }
 
-    public void setRating(Long rating) {
-        this.ratingId = rating;
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 
-    public List<Long> getUpVote() {
-        return userUpVoteId;
+    public List<Vote> getUpVote() {
+        return upVote;
     }
 
-    public void setUpVote(List<Long> upVote) {
-        this.userUpVoteId = upVote;
+    public void setUpVote(List<Vote> upVote) {
+        this.upVote = upVote;
     }
 
-    public List<Long> getDownVote() {
-        return userDownVoteId;
+    public List<Vote> getDownVote() {
+        return downVote;
     }
 
-    public void setDownVote(List<Long> downVote) {
-        this.userDownVoteId = downVote;
+    public void setDownVote(List<Vote> downVote) {
+        this.downVote = downVote;
     }
 
-    public boolean addUpVote(Long upVote) {
+    public boolean addUpVote(Vote upVote) {
 
         if (!this.approvalStatus.equals("approved"))
             return false;
 
-        if (!this.userUpVoteId.contains(upVote)) {
-            this.userUpVoteId.add(upVote);
+        if (!this.upVote.contains(upVote)) {
+            this.upVote.add(upVote);
             return true;
         }
         return false;
     }
 
-    public boolean addDownVote(Long downVote) {
+    public boolean addDownVote(Vote downVote) {
 
         if (!this.approvalStatus.equals("approved"))
             return false;
 
-        if (!this.userDownVoteId.contains(downVote)) {
-            this.userDownVoteId.add(downVote);
+        if (!this.downVote.contains(downVote)) {
+            this.downVote.add(downVote);
             return true;
         }
         return false;
     }
 
     public Review toReview() {
-        return new Review(this.idReview, this.reviewText, this.publishingDate, this.productId, this.funFact, this.ratingId, this.userId);
+        return new Review(this.idReview, this.reviewText, this.publishingDate, this.product, this.funFact, this.rating, this.user);
     }
 }
