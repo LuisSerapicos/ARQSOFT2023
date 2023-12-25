@@ -1,8 +1,8 @@
 package com.isep.acme.services;
 
+import com.isep.acme.controllers.ResourceNotFoundException;
 import com.isep.acme.model.*;
 import com.isep.acme.repositories.databases.ReviewDataBase;
-import com.isep.acme.review.ReviewGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -18,7 +18,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewDataBase reviewDataBase;
     //private final ProductDataBase productDataBase;
     //private final UserDataBase userDataBase;
-    private final ReviewGenerator reviewGenerator;
+    //private final ReviewGenerator reviewGenerator;
 
     //@Autowired
     //UserService userService;
@@ -35,43 +35,28 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Autowired
-    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, @Value("${database.interface.default}") String beanName2, @Value("${user.interface.default}") String beanName3, @Value("${recommendation.alg}") String reviewBeanName, ApplicationContext context) {
+    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, ApplicationContext context) {
         this.reviewDataBase = context.getBean(beanName, ReviewDataBase.class);
         //this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
         //this.userDataBase = context.getBean(beanName3, UserDataBase.class);
-        this.reviewGenerator = context.getBean(reviewBeanName, ReviewGenerator.class);
-    }
-
-    @Override
-    public Iterable<ReviewDTO> getRecommendedReviews(Long userId)
-    {
-        //final Optional<User> user = userDataBase.findById(userId);
-        //restService   //getUser com restService ou OpenFeign client
-
-        //if(user.isEmpty()) return null;
-
-        //Optional<List<Review>> r = reviewDataBase.findByUserId(user.get());
-
-        //if (r.isEmpty()) return null;
-
-        return reviewGenerator.getRecommendedReviews(userId);
+        //this.reviewGenerator = context.getBean(reviewBeanName, ReviewGenerator.class);
     }
 
     @Override
     public ReviewDTO create(final CreateReviewDTO createReviewDTO, String sku) {
-        //final Optional<Product> product = productDataBase.findBySku(sku);
+        final Optional<Product> product = Optional.of(new Product(100L, "skumegafixe2", "designation2", "description2"));
 
-        //if (product.isEmpty()) return null;
+        if (product.isEmpty()) return null;
 
-        //final var user = userService.getUserId(createReviewDTO.getUserID());
+        final var user = Optional.of(new User("user1", "user1"));
 
-        //if (user.isEmpty()) return null;
+        if (user.isEmpty()) return null;
 
-        //Rating rating = null;
-        //Optional<Rating> r = ratingService.findByRate(createReviewDTO.getRating());
-        //if (r.isPresent()) {
-        //    rating = r.get();
-        //}
+        Rating rating = null;
+        Optional<Rating> r = Optional.of(new Rating(4.0));
+        if (r.isPresent()) {
+            rating = r.get();
+        }
 
         LocalDate date = LocalDate.now();
 
@@ -91,7 +76,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ReviewDTO> getReviewsOfProduct(String sku, String status) {
 
-        Optional<Product> product = productDataBase.findBySku(sku);
+        Optional<Product> product = Optional.of(new Product("skumegafixe1"));
         if (product.isEmpty()) return null;
 
         Optional<List<Review>> r = reviewDataBase.findByProductIdStatus(product.get(), status);
@@ -198,7 +183,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ReviewDTO> findReviewsByUser(Long userID) {
 
-        final Optional<User> user = userDataBase.findById(userID);
+        final Optional<User> user = Optional.of(new User("user1", "user1"));
 
         if (user.isEmpty()) return null;
 

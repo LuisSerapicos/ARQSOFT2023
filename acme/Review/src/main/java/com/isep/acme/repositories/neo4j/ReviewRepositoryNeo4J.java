@@ -1,16 +1,19 @@
 package com.isep.acme.repositories.neo4j;
 
+import com.isep.acme.model.Product;
 import com.isep.acme.model.Review;
+import com.isep.acme.model.User;
+import com.isep.acme.persistance.neo4j.ProductNeo4J;
+import com.isep.acme.persistance.neo4j.RatingNeo4J;
 import com.isep.acme.persistance.neo4j.ReviewNeo4J;
+import com.isep.acme.persistance.neo4j.UserNeo4J;
 import com.isep.acme.repositories.databases.ReviewDataBase;
 import com.isep.acme.utils.ConvertIterable;
 import com.isep.acme.utils.RandomLongGenerator;
 import org.neo4j.ogm.model.Result;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +21,23 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 
 @Component("neo4J3")
-public interface ReviewRepositoryNeo4J extends Neo4jRepository<ReviewNeo4J, Long> {
+public class ReviewRepositoryNeo4J implements ReviewDataBase {
+
+    private final Session session;
+
+    //private final ProductDataBase productDataBase;
+
+    //private final UserDataBase userDataBase;
+
+    //private final RatingDataBase ratingDataBase;
+
+    @Autowired
+    public ReviewRepositoryNeo4J(ApplicationContext context, Session session) {
+        this.session = session;
+        //this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
+        //this.userDataBase = context.getBean(beanName3, UserDataBase.class);
+        //this.ratingDataBase = context.getBean(beanName4, RatingDataBase.class);
+    }
 
     @Override
     public Iterable<Review> getAllReview() {
@@ -44,7 +63,7 @@ public interface ReviewRepositoryNeo4J extends Neo4jRepository<ReviewNeo4J, Long
     public Review create(Review review) {
 
         User user = review.getUser();
-        User user2 = userDataBase.getById(user.getUserId());
+        User user2 = new User("user2", "user2");
 
         review.setUser(user2);
 
@@ -289,5 +308,9 @@ public interface ReviewRepositoryNeo4J extends Neo4jRepository<ReviewNeo4J, Long
             return Optional.of(reviews);
         else
             return Optional.empty();
+    }
+
+    public ReviewNeo4J toReviewNeo4J(Review review) {
+        return new ReviewNeo4J(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), "report", review.getPublishingDate(), review.getFunFact(), new ProductNeo4J(100L, "skumegafixe2", "designation2", "description2"), new RatingNeo4J(4.5), new UserNeo4J(100L, "user3", "user3", "usertres", "938233832", "Morada user3"));
     }
 }

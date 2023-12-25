@@ -1,12 +1,17 @@
 package com.isep.acme.repositories;
 
-import com.isep.acme.persistance.neo4j.ReviewNeo4J;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import com.isep.acme.model.Product;
+import com.isep.acme.model.Review;
+import com.isep.acme.model.User;
+import com.isep.acme.repositories.databases.ReviewDataBase;
 
-public interface ReviewRepository extends Neo4jRepository<ReviewNeo4J, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public class ReviewRepository implements ReviewDataBase {
 
     //Optional<Review> findById(Long productId);
-    /*@Override
+    @Override
     public Iterable<Review> getAllReview() {
         return null;
     }
@@ -27,7 +32,7 @@ public interface ReviewRepository extends Neo4jRepository<ReviewNeo4J, Long> {
     }
 
     @Override
-    public Optional<List<Review>> findByProductIdStatus(Long product, String status) {
+    public Optional<List<Review>> findByProductIdStatus(Product product, String status) {
         return Optional.empty();
     }
 
@@ -37,7 +42,7 @@ public interface ReviewRepository extends Neo4jRepository<ReviewNeo4J, Long> {
     }
 
     @Override
-    public Optional<List<Review>> findByProductId(Long product) {
+    public Optional<List<Review>> findByProductId(Product product) {
         return Optional.empty();
     }
 
@@ -52,12 +57,12 @@ public interface ReviewRepository extends Neo4jRepository<ReviewNeo4J, Long> {
     }
 
     @Override
-    public Optional<List<Review>> findByUserId(Long user) {
+    public Optional<List<Review>> findByUserId(User user) {
         return Optional.empty();
     }
 
     @Override
     public Optional<List<Review>> findByApprovalStatus(String status) {
         return Optional.empty();
-    }*/
+    }
 }

@@ -1,6 +1,7 @@
 package com.isep.acme.persistance.neo4j;
 
 import com.isep.acme.model.Review;
+import com.isep.acme.model.Vote;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -27,10 +28,10 @@ public class ReviewNeo4J {
     private String reviewText;
 
     @Relationship(type = "UPVOTED_BY", direction = Relationship.Direction.INCOMING)
-    private List<Long> upVote;
+    private List<Vote> upVote;
 
     @Relationship(type = "DOWNVOTED_BY", direction = Relationship.Direction.INCOMING)
-    private List<Long> downVote;
+    private List<Vote> downVote;
 
     private String report;
 
@@ -39,13 +40,13 @@ public class ReviewNeo4J {
     private String funFact;
 
     @Relationship(type = "FOR_PRODUCT", direction = Relationship.Direction.OUTGOING)
-    private Long productId;
+    private ProductNeo4J product;
 
     @Relationship(type = "BY_USER", direction = Relationship.Direction.OUTGOING)
-    private Long userId;
+    private UserNeo4J user;
 
     @Relationship(type = "HAS_RATING", direction = Relationship.Direction.OUTGOING)
-    private Long ratingId;
+    private RatingNeo4J rating;
 
     protected ReviewNeo4J(){}
 
@@ -58,7 +59,7 @@ public class ReviewNeo4J {
         setFunFact(funFact);
     }
 
-    public ReviewNeo4J(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Long> upVote, final List<Long> downVote, final String report, final LocalDate publishingDate, final String funFact, Long product, Long rating, Long user) {
+    public ReviewNeo4J(final Long idReview, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, ProductNeo4J product, RatingNeo4J rating, UserNeo4J user) {
         this(idReview, version, approvalStatus, reviewText, publishingDate, funFact);
 
         setUpVote(upVote);
@@ -70,7 +71,7 @@ public class ReviewNeo4J {
 
     }
 
-    public ReviewNeo4J(final String reviewText, LocalDate publishingDate, Long product, String funFact, Long rating, Long user) {
+    public ReviewNeo4J(final String reviewText, LocalDate publishingDate, ProductNeo4J product, String funFact, RatingNeo4J rating, UserNeo4J user) {
         setReviewText(reviewText);
         setProduct(product);
         setPublishingDate(publishingDate);
@@ -152,50 +153,50 @@ public class ReviewNeo4J {
         this.funFact = funFact;
     }
 
-    public void setProduct(Long product) {
-        this.productId = product;
+    public void setProduct(ProductNeo4J product) {
+        this.product = product;
     }
 
-    public Long getProduct() {
-        return productId;
+    public ProductNeo4J getProduct() {
+        return product;
     }
 
-    public Long getUser() {
-        return userId;
+    public UserNeo4J getUser() {
+        return user;
     }
 
-    public void setUser(Long user) {
-        this.userId = user;
+    public void setUser(UserNeo4J user) {
+        this.user = user;
     }
 
-    public Long getRating() {
-        /*if(ratingId == null) {
+    public RatingNeo4J getRating() {
+        if(rating == null) {
             return new RatingNeo4J(0.0);
-        }*/
-        return ratingId;
+        }
+        return rating;
     }
 
-    public void setRating(Long rating) {
-        this.ratingId = rating;
+    public void setRating(RatingNeo4J rating) {
+        this.rating = rating;
     }
 
-    public List<Long> getUpVote() {
+    public List<Vote> getUpVote() {
         return upVote;
     }
 
-    public void setUpVote(List<Long> upVote) {
+    public void setUpVote(List<Vote> upVote) {
         this.upVote = upVote;
     }
 
-    public List<Long> getDownVote() {
+    public List<Vote> getDownVote() {
         return downVote;
     }
 
-    public void setDownVote(List<Long> downVote) {
+    public void setDownVote(List<Vote> downVote) {
         this.downVote = downVote;
     }
 
-    public boolean addUpVote(Long upVote) {
+    public boolean addUpVote(Vote upVote) {
 
         if( !this.approvalStatus.equals("approved"))
             return false;
@@ -207,7 +208,7 @@ public class ReviewNeo4J {
         return false;
     }
 
-    public boolean addDownVote(Long downVote) {
+    public boolean addDownVote(Vote downVote) {
 
         if( !this.approvalStatus.equals( "approved") )
             return false;
@@ -220,6 +221,6 @@ public class ReviewNeo4J {
     }
 
     public Review toReview(){
-        return new Review(this.getIdReview(), this.getApprovalStatus(), this.getReviewText(), this.getPublishingDate(), this.productId, this.getFunFact(), this.ratingId, this.userId);
+        return new Review(this.getIdReview(), this.getApprovalStatus(), this.getReviewText(), this.getPublishingDate(), this.product.toProduct(), this.getFunFact(), this.rating.toRating(), this.user.toUser());
     }
 }
