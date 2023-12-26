@@ -19,7 +19,9 @@
         <module>Product</module>
         <module>apigw</module>
         <module>Review</module>
-    </modules>
+		<module>ReviewCommand</module>
+		<module>ReviewQuery</module>
+	</modules>
 
     <properties>
 		<java.version>19</java.version>
