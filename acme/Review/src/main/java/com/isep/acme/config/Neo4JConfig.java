@@ -11,9 +11,8 @@ public class Neo4JConfig {
     public SessionFactory sessionFactory() {
         // Configure your session factory here
         return new SessionFactory(new org.neo4j.ogm.config.Configuration.Builder()
-                .uri("neo4j://localhost:7687") // Neo4j URI
-                .credentials("neo4j", "12345678") // Neo4j credentials
-                .database("ACMEMicroservices")
+                .uri("neo4j://localhost:7687/ReviewMicroservice") // Neo4j URI
+                .credentials("neo4j", "password") // Neo4j credentials
                 .build(), "com.isep.acme.persistance.neo4j.*");
     }
 

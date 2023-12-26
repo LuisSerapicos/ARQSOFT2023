@@ -1,0 +1,42 @@
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  neo4j:
+    image: neo4j
+    container_name: neo4jDB
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+networks:
+  mongo-express:
+    driver: bridge
+volumes:
+  mongodb_data: {}
+  neo4j:
