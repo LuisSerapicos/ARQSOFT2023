@@ -434,8 +434,7 @@ public class Cmyhwh {
         System.out.println("rftdo");
         System.out.println("rsjjr");
         System.out.println("whpxl");
-        System.out.println("ixlta");
-        System.out.println("ulwyc");
-        System.out.println("rkvno");
+        System.out.println("yegck");
+        System.out.println("qmnep");
     }
 }
