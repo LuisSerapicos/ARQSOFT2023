@@ -18,10 +18,15 @@ spring:
             - Path=/api/v1/product/**
             - Method=GET
         - id: reviewCommandRoute
-          uri: lb://REVIEW
+          uri: lb://REVIEWCOMMAND
           predicates:
             - Path=/api/v1/reviews/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=POST,PUT,DELETE
+        - id: reviewQueryRoute
+          uri: lb://REVIEWQUERY
+          predicates:
+            - Path=/api/v1/reviews/**
+            - Method=GET
         - id: user
           uri: lb://USER
           predicates:
