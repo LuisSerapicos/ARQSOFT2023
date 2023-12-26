@@ -8,12 +8,12 @@ spring:
     gateway:
       routes:
         - id: productCommandRoute
-          uri: lb://PRODUCT
+          uri: lb://PRODUCTCOMMAND
           predicates:
             - Path=/api/v1/product/**
             - Method=POST,PUT,DELETE
         - id: productQueryRoute
-          uri: lb://PRODUCT
+          uri: lb://PRODUCTQUERY
           predicates:
             - Path=/api/v1/product/**
             - Method=GET
