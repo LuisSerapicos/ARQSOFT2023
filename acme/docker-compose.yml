@@ -28,8 +28,15 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+  neo4j:
+    image: neo4j
+    container_name: neo4jDB
+    ports:
+      - "7474:7474"
+      - "7687:7687"
 networks:
   mongo-express:
     driver: bridge
 volumes:
   mongodb_data: {}
+  neo4j:
