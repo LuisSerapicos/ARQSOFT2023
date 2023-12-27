@@ -1,5 +1,6 @@
 package com.isep.acme;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
@@ -15,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     private final ConnectionFactory connectionFactory;
+
+    private ObjectMapper objectMapper;
 
     @Bean
     public AmqpTemplate amqpTemplate() {
@@ -34,9 +37,7 @@ public class RabbitMQConfig {
 
     @Bean
     public MessageConverter jacksonConverter() {
-        MessageConverter jackson2JsonMessageConverter =
-                new Jackson2JsonMessageConverter();
-        return jackson2JsonMessageConverter;
+        return new Jackson2JsonMessageConverter(objectMapper);
     }
 
 }

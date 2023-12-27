@@ -12,9 +12,4 @@ public class QueryProductApplication {
     public static void main(String[] args) {
         SpringApplication.run(QueryProductApplication.class, args);
     }
-
-    @Bean
-    CommandLineRunner commandLineRunner(
-            RabbitMQ
-    )
 }

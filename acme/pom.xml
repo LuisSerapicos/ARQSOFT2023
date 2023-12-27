@@ -19,6 +19,9 @@
         <module>Product</module>
         <module>apigw</module>
 		<module>CommandProduct</module>
+		<module>amqp</module>
+		<module>QueryProduct</module>
+		<module>eureka-server</module>
 	</modules>
 
     <properties>

@@ -13,6 +13,6 @@ public class ProductConsumer {
 
     @RabbitListener(queues = "product.queue")
     public void consumer(Product productRequest){
-        log.info("Consumed {} from queue", productRequest);
+        /*log.info("Consumed {} from queue", productRequest);*/
     }
 }

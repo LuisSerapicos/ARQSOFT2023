@@ -16,24 +16,40 @@ public class ProductConfig {
     @Value("${rabbitmq.queues.product}")
     private String productQueue;
 
+    @Value("${rabbitmq.queues.product2}")
+    private String product2Queue;
+
     @Value("${rabbitmq.routing-keys.internal-product}")
     private String internalProductRoutingKey;
 
     @Bean
-    public TopicExchange internalTopicExchange() {
+    public TopicExchange internalExchange() {
         return new TopicExchange(this.internalExchange);
     }
 
     @Bean
-    public Queue notificationQueue() {
+    public Queue productQueue() {
         return new Queue(this.productQueue);
     }
 
     @Bean
-    public Binding internalToNotificationBinding() {
+    public Queue productQueue2() {
+        return new Queue(this.product2Queue);
+    }
+
+    @Bean
+    public Binding internalProduct() {
         return BindingBuilder
-                .bind(notificationQueue())
-                .to(internalTopicExchange())
+                .bind(productQueue())
+                .to(internalExchange())
+                .with(this.internalProductRoutingKey);
+    }
+
+    @Bean
+    public Binding internalProduct2() {
+        return BindingBuilder
+                .bind(productQueue2())
+                .to(internalExchange())
                 .with(this.internalProductRoutingKey);
     }
 }
