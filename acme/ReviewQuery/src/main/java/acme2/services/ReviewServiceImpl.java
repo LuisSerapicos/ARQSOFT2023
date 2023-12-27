@@ -74,6 +74,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Review createReview(Review review) {
+        reviewDataBase.createReview(review);
+
+        return review;
+    }
+
+    @Override
     public List<ReviewDTO> getReviewsOfProduct(String sku, String status) {
 
         Optional<Product> product = Optional.of(new Product("skumegafixe1"));

@@ -3,6 +3,7 @@ package acme.services;
 import acme.model.*;
 import acme.repositories.databases.ReviewDataBase;
 import acme.controllers.ResourceNotFoundException;
+import com.isep.acme.RabbitMQMessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -20,6 +21,8 @@ public class ReviewServiceImpl implements ReviewService {
     //private final UserDataBase userDataBase;
     //private final ReviewGenerator reviewGenerator;
 
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
+
     //@Autowired
     //UserService userService;
 
@@ -35,7 +38,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Autowired
-    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, ApplicationContext context) {
+    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, ApplicationContext context, RabbitMQMessageProducer rabbitMQMessageProducer) {
+        this.rabbitMQMessageProducer = rabbitMQMessageProducer;
         this.reviewDataBase = context.getBean(beanName, ReviewDataBase.class);
         //this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
         //this.userDataBase = context.getBean(beanName3, UserDataBase.class);
@@ -48,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (product.isEmpty()) return null;
 
-        final var user = Optional.of(new User("user1", "user1"));
+        final var user = Optional.of(new User(100L, "user3", "user3", "usertres", "938233832", "Morada user3"));
 
         if (user.isEmpty()) return null;
 
@@ -68,7 +72,15 @@ public class ReviewServiceImpl implements ReviewService {
 
         review = reviewDataBase.create(review);
 
+        review.setReport("report");
+
         if (review == null) return null;
+
+        rabbitMQMessageProducer.publish(
+                review,
+                "internal.exchange",
+                "internal.review.routing-key"
+        );
 
         return ReviewMapper.toDto(review);
     }

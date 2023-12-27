@@ -10,6 +10,8 @@ public interface ReviewDataBase {
 
     Review create(Review review);
 
+    Review createReview(Review review);
+
     Review updateApprovalStatus(Review review);
 
     Review updateVote(Review review, String voteType);

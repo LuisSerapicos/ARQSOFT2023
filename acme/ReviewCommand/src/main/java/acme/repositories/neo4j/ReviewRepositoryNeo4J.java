@@ -63,7 +63,7 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
     public Review create(Review review) {
 
         User user = review.getUser();
-        User user2 = new User("user2", "user2");
+        User user2 = new User(100L, "user3", "user3", "usertres", "938233832", "Morada user3");
 
         review.setUser(user2);
 
