@@ -78,6 +78,14 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
     }
 
     @Override
+    public Review createReview(Review review) {
+        ReviewNeo4J save = toReviewNeo4J(review);
+
+        session.save(save);
+        return review;
+    }
+
+    @Override
     public Review updateApprovalStatus(Review review) {
         if (review == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);

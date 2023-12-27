@@ -21,6 +21,7 @@
         <module>Review</module>
 		<module>ReviewCommand</module>
 		<module>ReviewQuery</module>
+		<module>amqp</module>
 	</modules>
 
     <properties>

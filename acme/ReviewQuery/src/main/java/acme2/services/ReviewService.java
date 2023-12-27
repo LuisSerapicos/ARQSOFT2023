@@ -12,6 +12,8 @@ public interface ReviewService {
 
     ReviewDTO create(CreateReviewDTO createReviewDTO, String sku);
 
+    Review createReview(Review review);
+
     boolean addVoteToReview(Long reviewID, VoteReviewDTO voteReviewDTO);
 
     Double getWeightedAverage(Product product);
