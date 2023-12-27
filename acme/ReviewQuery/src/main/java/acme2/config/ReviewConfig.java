@@ -25,6 +25,9 @@ public class ReviewConfig {
     @Value("${rabbitmq.queue.review}")
     private String reviewQueue;
 
+    @Value("${rabbitmq.queue.review2}")
+    private String reviewQueue2;
+
     @Value("${rabbitmq.routing-keys.internal-review}")
     private String internalReviewRoutingKey;
 
@@ -39,9 +42,22 @@ public class ReviewConfig {
     }
 
     @Bean
+    public Queue reviewQueue2() {
+        return new Queue(this.reviewQueue2);
+    }
+
+    @Bean
     public Binding internalReview() {
         return BindingBuilder
                 .bind(reviewQueue())
+                .to(internalTopicExchange())
+                .with(this.internalReviewRoutingKey);
+    }
+
+    @Bean
+    public Binding internalReview2() {
+        return BindingBuilder
+                .bind(reviewQueue2())
                 .to(internalTopicExchange())
                 .with(this.internalReviewRoutingKey);
     }
@@ -52,6 +68,10 @@ public class ReviewConfig {
 
     public String getReviewQueue() {
         return reviewQueue;
+    }
+
+    public String getReviewQueue2() {
+        return reviewQueue2;
     }
 
     public String getInternalReviewRoutingKey() {
