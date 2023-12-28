@@ -31,9 +31,8 @@ database:
 
 rabbitmq:
   exchanges:
-    internal: internal.exchange
+
   queues:
     product: product.queue
-    product2: product2.queue
+
   routing-keys:
-    internal-product: internal.product.routing-key

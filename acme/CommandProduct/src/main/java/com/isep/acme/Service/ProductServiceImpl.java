@@ -78,8 +78,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO create(final Product product) {
         final Product p = new Product(skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
+        final Product p1 = new Product(11111L,skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
         rabbitMQMessageProducer.publish(
-                p,
+                p1,
                 "internal.exchange",
                 "internal.product.routing-key");
         return productDataBase.saveProduct(p).toDto();

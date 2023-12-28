@@ -1,8 +1,5 @@
 package com.isep.acme.Model;
 
-
-
-
 import javax.persistence.*;
 
 @Entity
