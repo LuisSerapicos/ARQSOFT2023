@@ -23,7 +23,6 @@
 		<module>QueryProduct</module>
 		<module>eureka-server</module>
 		<module>User</module>
-	</modules>
         <module>Review</module>
 		<module>ReviewCommand</module>
 		<module>ReviewQuery</module>
