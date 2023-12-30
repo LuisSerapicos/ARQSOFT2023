@@ -930,7 +930,27 @@ public class Cmyhwh {
         System.out.println("obxsm");
         System.out.println("osskv");
         System.out.println("llusm");
-        System.out.println("jgwkr");
-        System.out.println("fuixs");
+        System.out.println("wavet");
+        System.out.println("joqkw");
+        System.out.println("xvxak");
+        System.out.println("jkrbi");
+        System.out.println("sfkgn");
+        System.out.println("fpmqa");
+        System.out.println("qycqh");
+        System.out.println("rqqlh");
+        System.out.println("rwfqy");
+        System.out.println("ducel");
+        System.out.println("rdnsm");
+        System.out.println("oysoa");
+        System.out.println("tlknh");
+        System.out.println("xoivt");
+        System.out.println("kskmw");
+        System.out.println("ugqoe");
+        System.out.println("obtpc");
+        System.out.println("xirye");
+        System.out.println("dceqw");
+        System.out.println("hcpod");
+        System.out.println("vucdo");
+        System.out.println("oqwhg");
     }
 }
