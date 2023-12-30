@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.List;
+
 import static com.isep.acme1.Model.Generator.generateLongID;
 
 @Document(collection = "product")
@@ -25,6 +28,15 @@ public class ProductMongo {
 
     @Field(value = "description")
     private String description;
+
+    @Field(value = "status")
+    private String status;
+
+    @Field(value = "userID")
+    private List<String> username;
+
+    @Field(value = "numberApprove")
+    private int numberApprove;
 
     public ProductMongo(final String sku) {
         productID = generateLongID();
@@ -90,9 +102,9 @@ public class ProductMongo {
         return productID;
     }
 
-    /*public ProductDTO toDto() {
+    public ProductDTO toDto() {
         return new ProductDTO(this.sku, this.designation);
-    }*/
+    }
 
     public Product toProduct(){
         return new Product(this.productID, this.sku,this.designation,this.description);

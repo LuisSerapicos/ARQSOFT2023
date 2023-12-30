@@ -18,7 +18,6 @@ public class ProductConfig {
         return new RestTemplate();
     }
 
-
     @Value("${rabbitmq.exchanges.internal}")
     private String internalExchange;
 

@@ -1,6 +1,7 @@
 package com.isep.acme.Model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -17,6 +18,16 @@ public class Product {
 
     @Column(nullable = false)
     private String description;
+
+    @Column()
+    private String status;
+
+    @Column()
+    private int numberApprove;
+
+    @ElementCollection
+    private List<String> username;
+
     /*
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Review> review = new ArrayList<Review>(); */
@@ -33,6 +44,8 @@ public class Product {
         this.sku = sku;
         setDescription(description);
         setDesignation(designation);
+        this.status = "pending";
+        this.numberApprove = 0;
     }
 
     public Product(final String sku) {
@@ -104,7 +117,32 @@ public class Product {
     public ProductDTO toDto() {
         return new ProductDTO(this.sku, this.designation);
     }
-/*
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getNumberApprove() {
+        return numberApprove;
+    }
+
+    public void setNumberApprove(int numberApprove) {
+        this.numberApprove = numberApprove;
+    }
+
+    public List<String> getUsername() {
+        return username;
+    }
+
+    public void setUsername(List<String> userID) {
+        this.username = userID;
+    }
+
+    /*
     public List<Review> getReview() {
         return review;
     }

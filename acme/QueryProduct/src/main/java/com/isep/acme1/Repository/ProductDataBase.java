@@ -1,9 +1,9 @@
-package com.isep.acme.Repository;
+package com.isep.acme1.Repository;
 
 
 
-import com.isep.acme.Model.Product;
-import com.isep.acme.Model.ProductMongo;
+import com.isep.acme1.Model.Product;
+import com.isep.acme1.Model.ProductMongo;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -21,15 +21,11 @@ public interface ProductDataBase {
 
     List<Product> findByDesignation(String designation);
 
-    void updateBySku( Optional<Product> updatedProduct, String username);
+    Product updateBySku(@Param("sku") String sku, Product updatedProduct);
 
     Optional<Product> findById(Long productID);
 
     Product create(Product p);
 
     ProductMongo toProductMongo(Product product);
-
-    ProductMongo toProductMongoUser(Product product, String username);
-
-    Boolean userExists(String username);
 }

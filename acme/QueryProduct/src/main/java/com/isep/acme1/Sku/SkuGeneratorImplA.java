@@ -1,4 +1,4 @@
-package com.isep.acme.sku;
+package com.isep.acme1.Sku;
 
 import org.springframework.stereotype.Component;
 

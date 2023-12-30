@@ -1,10 +1,9 @@
-package com.isep.acme.Repository;
+package com.isep.acme1.Repository;
 
 
-
-import com.isep.acme.ConvertIterable;
-import com.isep.acme.Model.Product;
-import com.isep.acme.Model.ProductMongo;
+import com.isep.acme1.ConvertIterable;
+import com.isep.acme1.Model.Product;
+import com.isep.acme1.Model.ProductMongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -107,23 +106,6 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
     }
 
     @Override
-    public ProductMongo toProductMongoUser(Product product, String username) {
-        return new ProductMongo(product.getProductID(), product.sku, product.getDesignation(), product.getDescription(), product.getStatus(), username);
-    }
-
-    @Override
-    public Boolean userExists(String username) {
-        Query query = new Query(Criteria.where("username").is(username));
-        List<ProductMongo> productMongo = mongoTemplate.find(query, ProductMongo.class);
-            for (ProductMongo pd : productMongo) {
-            if (pd.getUsername().contains(username)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public void deleteBySku(String sku) {
         System.out.println(sku);
         Query query = new Query(Criteria.where("sku").is(sku));
@@ -147,19 +129,8 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
     }
 
     @Override
-    public void updateBySku(Optional<Product> updatedProduct, String username) {
-        if (updatedProduct.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-            ProductMongo save = toProductMongoUser(updatedProduct.get(), username);
-        if (findBySku(save.sku).isPresent()) {
-            Query query = new Query(Criteria.where("sku").is(save.sku));
-            Update update = new Update();
-            update.inc("numberApprove",1);
-            update.push("username", username);
-
-            mongoTemplate.updateFirst(query, update, ProductMongo.class);
-        }
+    public Product updateBySku(String sku, Product updatedProduct) {
+        return null;
     }
 
 }

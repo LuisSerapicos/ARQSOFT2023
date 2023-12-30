@@ -1,6 +1,5 @@
 package com.isep.acme.review;
 
-import com.isep.acme.model.*;
 import com.isep.acme.repositories.databases.ReviewDataBase;
 import com.isep.acme.repositories.databases.UserDataBase;
 import org.springframework.beans.factory.annotation.Value;

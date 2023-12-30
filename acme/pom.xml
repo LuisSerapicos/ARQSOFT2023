@@ -22,6 +22,7 @@
 		<module>amqp</module>
 		<module>QueryProduct</module>
 		<module>eureka-server</module>
+		<module>User</module>
 	</modules>
 
     <properties>

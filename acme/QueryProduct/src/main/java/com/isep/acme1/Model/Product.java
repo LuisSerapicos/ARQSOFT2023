@@ -2,6 +2,8 @@ package com.isep.acme1.Model;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -18,6 +20,13 @@ public class Product {
 
     @Column(nullable = false)
     private String description;
+
+    @Column()
+    private String status;
+
+    @ElementCollection
+    private List<String> userID;
+    private int numberApprove;
     /*
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Review> review = new ArrayList<Review>(); */
@@ -29,11 +38,14 @@ public class Product {
         setSku(sku);
     }
 
+    //Unapproved Product
     public Product(final Long productID, final String sku, final String designation, final String description) {
         this.productID= productID;
         this.sku = sku;
         setDescription(description);
         setDesignation(designation);
+        this.status = "pending";
+        this.numberApprove = 0;
     }
 
     public Product(final String sku) {
@@ -62,7 +74,9 @@ public class Product {
         if (designation == null || designation.isBlank()) {
             throw new IllegalArgumentException("Designation is a mandatory attribute of Product.");
         }
-        if (designation.length() > 50) {
+        if (designation.length() /*public ProductDTO toDto() {
+        return new ProductDTO(this.sku, this.designation);
+    }*/> 50) {
             throw new IllegalArgumentException("Designation must not be greater than 50 characters.");
         }
         this.designation = designation;
@@ -102,9 +116,9 @@ public class Product {
         this.productID = productID;
     }
 
-    /*public ProductDTO toDto() {
+    public ProductDTO toDto() {
         return new ProductDTO(this.sku, this.designation);
-    }*/
+    }
 /*
     public List<Review> getReview() {
         return review;

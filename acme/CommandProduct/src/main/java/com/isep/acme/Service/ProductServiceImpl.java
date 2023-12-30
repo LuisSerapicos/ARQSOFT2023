@@ -6,10 +6,15 @@ import com.isep.acme.Model.ProductDetailDTO;
 import com.isep.acme.RabbitMQMessageProducer;
 import com.isep.acme.Repository.ProductDataBase;
 import com.isep.acme.sku.SkuGenerator;
+import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.ArrayList;
@@ -102,6 +107,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Boolean approveByUser(String sku, String username) {
+        final Optional<Product> productToUpdate = productDataBase.findBySku(sku);
+        if (productToUpdate.isEmpty()) throw new IllegalArgumentException("");
+        if (!checkProductManager(username)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"The user is not a Product Manager");
+        productDataBase.updateBySku(productToUpdate, username);
+        return true;
+    }
+
+    //Logic for check if is a product manager and if is the first approvel
+    private Boolean checkProductManager(String username){
+        RestTemplate restTemplate = new RestTemplate();
+        String fooResourceUrl = "http://localhost:8083/api/v1/user/";
+        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl + "/"+username, String.class);
+        System.out.println(response);
+        return true;
+    }
+
+    @Override
     public void deleteBySku(String sku) {
         productDataBase.deleteBySku(sku);
     }
@@ -109,5 +132,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void createSku() {
         skuType.generateSku("pencil");
+    }
+
+    @Override
+    public Boolean verifyIfExists(String username) {
+        productDataBase.userExists(username);
+        return true;
     }
 }

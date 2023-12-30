@@ -11,12 +11,16 @@ spring:
           uri: lb://PRODUCTCOMMAND
           predicates:
             - Path=/api/v1/product/**
-            - Method=POST,PUT,DELETE
+            - Method=POST,PUT,DELETE,PATCH
         - id: productQueryRoute
           uri: lb://PRODUCTQUERY
           predicates:
             - Path=/api/v1/product/**
             - Method=GET
+        - id: user
+          uri: lb://USER
+          predicates:
+            - Path=/api/v1/user/**
 eureka:
   client:
     service-url:

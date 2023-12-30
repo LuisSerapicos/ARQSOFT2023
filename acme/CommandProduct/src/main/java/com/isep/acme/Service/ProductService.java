@@ -25,7 +25,11 @@ public interface ProductService {
 
     ProductDTO updateBySku(final String sku, final Product product);
 
+    Boolean approveByUser(final String sku, final String username);
+
     void deleteBySku(final String sku);
 
     void createSku();
+
+    Boolean verifyIfExists(String username);
 }

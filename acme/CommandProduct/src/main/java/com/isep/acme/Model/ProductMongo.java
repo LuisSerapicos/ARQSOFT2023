@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Document(collection = "product")
 @Data
@@ -25,6 +28,15 @@ public class ProductMongo{
     @Field(value = "description")
     private String description;
 
+    @Field(value = "status")
+    private String status;
+
+    @Field(value = "userID")
+    private List<String> username;
+
+    @Field(value = "numberApprove")
+    private int numberApprove;
+
     public ProductMongo(final String sku) {
         productID = Generator.generateLongID();
         setSku(sku);
@@ -35,6 +47,15 @@ public class ProductMongo{
         this.productID = productID;
         setDescription(description);
         setDesignation(designation);
+    }
+
+    public ProductMongo(Long productID, final String sku, final String designation, final String description, final String status, String username) {
+        this(sku);
+        this.productID = productID;
+        setDescription(description);
+        setDesignation(designation);
+        this.status = status;
+        addUsername(username);
     }
 
     public void setSku(String sku) {
@@ -97,8 +118,42 @@ public class ProductMongo{
         return new Product(this.productID, this.sku,this.designation,this.description);
     }
 
+    public void setProductID(Long productID) {
+        this.productID = productID;
+    }
 
-/*
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<String> getUsername() {
+        return username;
+    }
+
+    public void setUsername(List<String> username) {
+        this.username = username;
+    }
+
+    public void addUsername(String username){
+        if (this.username == null) {
+            this.username = new ArrayList<>();
+        }
+        this.username.add(username);
+    }
+
+    public int getNumberApprove() {
+        return numberApprove;
+    }
+
+    public void setNumberApprove(int numberApprove) {
+        this.numberApprove = numberApprove;
+    }
+
+    /*
     public List<Review> getReview() {
         return review;
     }

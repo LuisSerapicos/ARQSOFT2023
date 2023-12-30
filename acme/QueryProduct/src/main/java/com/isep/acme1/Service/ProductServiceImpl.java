@@ -1,11 +1,12 @@
-package com.isep.acme.services;
+package com.isep.acme1.Service;
 
-import com.isep.acme.model.Product;
-import com.isep.acme.model.ProductDTO;
-import com.isep.acme.model.ProductDetailDTO;
-import com.isep.acme.repositories.databases.ProductDataBase;
-
-import com.isep.acme.sku.SkuGenerator;
+import com.isep.acme1.Model.Product;
+import com.isep.acme1.Model.ProductDTO;
+import com.isep.acme1.Model.ProductDetailDTO;
+import com.isep.acme1.Repository.ProductDataBase;
+import com.isep.acme1.Sku.SkuGenerator;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -15,7 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.rmi.server.LogStream.log;
+
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     private final SkuGenerator skuType;
@@ -23,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductDataBase productDataBase;
 
     @Autowired
-    public ProductServiceImpl(@Value("${sku.interface.generator.default}") String beanName, @Value("${database.interface.default}") String beanName2 ,ApplicationContext context) {
+    public ProductServiceImpl(@Value("${sku.interface.generator.default}") String beanName, @Value("${database.interface.default}") String beanName2 , ApplicationContext context) {
         this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
         this.skuType = context.getBean(beanName, SkuGenerator.class);
     }
@@ -57,6 +61,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Iterable<ProductDTO> getCatalog() {
         Iterable<Product> p = productDataBase.getCatalog();
+        System.out.println("GET" + p);
         List<ProductDTO> pDto = new ArrayList();
         for (Product pd : p) {
             pDto.add(pd.toDto());
@@ -75,9 +80,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO create(final Product product) {
-
         final Product p = new Product(skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
+        return productDataBase.saveProduct(p).toDto();
+    }
 
+    @Override
+    public ProductDTO createProduct(final Product product){
+        final Product p = new Product(product.getSku(), product.getDesignation(), product.getDescription());
         return productDataBase.saveProduct(p).toDto();
     }
 

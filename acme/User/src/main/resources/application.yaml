@@ -1,20 +1,22 @@
 server:
-  port: 8085
+  port: 8086
 
 spring:
   application:
-    name: productQuery
+    name: user
   rabbitmq:
     addresses: localhost:5672
   data:
     mongodb:
-      uri: mongodb://root:password@localhost:27017/query_product
-      database: query_product
+      uri: mongodb://root:password@localhost:27017/user
+      database: user
 sku:
   interface:
     generator:
       default: skuA
-
+user:
+  interface:
+    default: mongoDB1
 database:
   interface:
     default: mongoDB
