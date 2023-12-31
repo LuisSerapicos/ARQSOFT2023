@@ -1,12 +1,9 @@
 package com.isep.acme.Service;
 
-import com.isep.acme.Model.Product;
-import com.isep.acme.Model.ProductDTO;
-import com.isep.acme.Model.ProductDetailDTO;
+import com.isep.acme.Model.*;
 import com.isep.acme.RabbitMQMessageProducer;
 import com.isep.acme.Repository.ProductDataBase;
 import com.isep.acme.sku.SkuGenerator;
-import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -83,9 +80,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO create(final Product product) {
         final Product p = new Product(skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
-        final Product p1 = new Product(11111L,skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
+        final Product p1 = new Product(111L, skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
+        ProductType productWithType = new ProductType(p1,"add");
         rabbitMQMessageProducer.publish(
-                p1,
+                productWithType,
                 "internal.exchange",
                 "internal.product.routing-key");
         return productDataBase.saveProduct(p).toDto();
@@ -125,8 +123,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteBySku(String sku) {
-        productDataBase.deleteBySku(sku);
+    public Product deleteBySku(String sku) {
+        return productDataBase.deleteBySku(sku);
     }
 
     @Override
@@ -135,8 +133,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Boolean verifyIfExists(String username) {
-        productDataBase.userExists(username);
-        return true;
+    public Boolean verifyIfExists(ProductUser username) {
+        return productDataBase.userExists(username);
+    }
+
+    @Override
+    public Boolean updateStatus(ProductUser productUser) {
+        return productDataBase.changeStatusApproved(productUser);
     }
 }

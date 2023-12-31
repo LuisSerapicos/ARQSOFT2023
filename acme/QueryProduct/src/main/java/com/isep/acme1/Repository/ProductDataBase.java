@@ -17,6 +17,9 @@ public interface ProductDataBase {
 
     Optional<Product> findBySku(String sku);
     Iterable<Product> getCatalog();
+
+    ProductMongo toProductMongoUser(Product product, String username);
+
     void deleteBySku(String sku);
 
     List<Product> findByDesignation(String designation);
@@ -28,4 +31,6 @@ public interface ProductDataBase {
     Product create(Product p);
 
     ProductMongo toProductMongo(Product product);
+
+    ProductMongo toProductMongoCreate(Product product);
 }

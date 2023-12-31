@@ -1,15 +1,14 @@
 package com.isep.acme1.Model;
 
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.isep.acme1.Model.Generator.generateLongID;
 
 @Document(collection = "product")
 @Data
@@ -32,18 +31,43 @@ public class ProductMongo {
     @Field(value = "status")
     private String status;
 
-    @Field(value = "userID")
+    @Field(value = "username")
     private List<String> username;
 
     @Field(value = "numberApprove")
     private int numberApprove;
 
     public ProductMongo(final String sku) {
-        productID = generateLongID();
+        productID = Generator.generateLongID();
         setSku(sku);
     }
 
-    public ProductMongo(Long productID, final String sku, final String designation, final String description) {
+    public ProductMongo( final String sku, final String designation, final String description, final String status) {
+        this(sku);
+        this.productID = Generator.generateLongID();;
+        setDescription(description);
+        setDesignation(designation);
+        setStatus(status);
+    }
+
+    public ProductMongo(Long productID, final String sku, final String designation, final String description, final String status) {
+        this(sku);
+        this.productID = productID;
+        setDescription(description);
+        setDesignation(designation);
+        this.status= status;
+    }
+
+    public ProductMongo(Long productID, final String sku, final String designation, final String description, final String status, String username) {
+        this(sku);
+        this.productID = productID;
+        setDescription(description);
+        setDesignation(designation);
+        this.status = status;
+        addUsername(username);
+    }
+
+    public ProductMongo(Long productID, String sku, String designation, String description) {
         this(sku);
         this.productID = productID;
         setDescription(description);
@@ -107,11 +131,45 @@ public class ProductMongo {
     }
 
     public Product toProduct(){
-        return new Product(this.productID, this.sku,this.designation,this.description);
+        return new Product(this.productID, this.sku,this.designation,this.description,this.status,this.getUsername());
     }
 
+    public void setProductID(Long productID) {
+        this.productID = productID;
+    }
 
-/*
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<String> getUsername() {
+        return username;
+    }
+
+    public void setUsername(List<String> username) {
+        this.username = username;
+    }
+
+    public void addUsername(String username){
+        if (this.username == null) {
+            this.username = new ArrayList<>();
+        }
+        this.username.add(username);
+    }
+
+    public int getNumberApprove() {
+        return numberApprove;
+    }
+
+    public void setNumberApprove(int numberApprove) {
+        this.numberApprove = numberApprove;
+    }
+
+    /*
     public List<Review> getReview() {
         return review;
     }

@@ -39,13 +39,13 @@ public class Product {
         setSku(sku);
     }
 
-    public Product(final Long productID, final String sku, final String designation, final String description) {
+    public Product(final Long productID, final String sku, final String designation, final String description, final String status, final List<String> username) {
         this.productID= productID;
         this.sku = sku;
         setDescription(description);
         setDesignation(designation);
-        this.status = "pending";
-        this.numberApprove = 0;
+        this.status = status;
+        this.username = username;
     }
 
     public Product(final String sku) {
@@ -56,6 +56,14 @@ public class Product {
         this(sku);
         setDescription(description);
         setDesignation(designation);
+        this.status="pending";
+    }
+
+    public Product(final long productID, final String sku, final String designation, final String description) {
+        this(sku);
+        setDescription(description);
+        setDesignation(designation);
+        this.status="pending";
     }
 
     public void setSku(String sku) {

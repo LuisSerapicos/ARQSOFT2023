@@ -5,6 +5,7 @@ package com.isep.acme.Service;
 import com.isep.acme.Model.Product;
 import com.isep.acme.Model.ProductDTO;
 import com.isep.acme.Model.ProductDetailDTO;
+import com.isep.acme.Model.ProductUser;
 
 import java.util.Optional;
 
@@ -27,9 +28,11 @@ public interface ProductService {
 
     Boolean approveByUser(final String sku, final String username);
 
-    void deleteBySku(final String sku);
+    Product deleteBySku(final String sku);
 
     void createSku();
 
-    Boolean verifyIfExists(String username);
+    Boolean verifyIfExists(ProductUser username);
+
+    Boolean updateStatus(ProductUser productUser);
 }

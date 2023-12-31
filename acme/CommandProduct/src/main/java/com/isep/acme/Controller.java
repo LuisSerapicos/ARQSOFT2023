@@ -1,8 +1,6 @@
 package com.isep.acme;
 
-import com.isep.acme.Model.Product;
-import com.isep.acme.Model.ProductDTO;
-import com.isep.acme.Model.ProductUser;
+import com.isep.acme.Model.*;
 import com.isep.acme.Service.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Slf4j
 @RestController
 @RequestMapping("api/v1/product")
 @AllArgsConstructor
 public class Controller {
+
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     @Autowired
     private final ProductService service;
@@ -32,11 +34,16 @@ public class Controller {
 
     @PatchMapping(value = "/approve")
     public ResponseEntity<ProductUser> approve(@RequestBody final ProductUser productUser) {
-        System.out.println("Approve");
+        if(service.verifyIfExists(productUser)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This product Manager already approved");
         final Boolean productDTO = service.approveByUser(productUser.getSku(), productUser.getUsername());
-        if(service.verifyIfExists(productUser.getUsername())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "This product Manager already approved");
         if(!productDTO) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Is not a Product Manager");
-        /*service.updateStatus();*/
+        service.updateStatus(productUser);
+        Optional<Product> updatedProductToPublish = service.getProductBySku(productUser.getSku());
+        ProductType productWithType = new ProductType(updatedProductToPublish.get(),"update");
+        rabbitMQMessageProducer.publish(
+                productWithType,
+                "internal.exchange",
+                "internal.product.routing-key");
         return ResponseEntity.ok().body(productUser);
     }
 
@@ -56,7 +63,12 @@ public class Controller {
     @DeleteMapping(value = "/{sku}")
     public ResponseEntity<Product> delete(@PathVariable("sku") final String sku) {
 
-        service.deleteBySku(sku);
+        Product product = service.deleteBySku(sku);
+        ProductType productWithType = new ProductType(product,"delete");
+        rabbitMQMessageProducer.publish(
+                productWithType,
+                "internal.exchange",
+                "internal.product.routing-key");
         return ResponseEntity.noContent().build();
     }
 }

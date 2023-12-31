@@ -79,10 +79,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDTO create(Product manager) {
+        return null;
+    }
+
+    /*@Override
     public ProductDTO create(final Product product) {
         final Product p = new Product(skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
         return productDataBase.saveProduct(p).toDto();
-    }
+    }*/
 
     @Override
     public ProductDTO createProduct(final Product product){

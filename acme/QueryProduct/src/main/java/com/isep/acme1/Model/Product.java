@@ -1,8 +1,6 @@
 package com.isep.acme1.Model;
 
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,9 +22,12 @@ public class Product {
     @Column()
     private String status;
 
-    @ElementCollection
-    private List<String> userID;
+    @Column()
     private int numberApprove;
+
+    @ElementCollection
+    private List<String> username;
+
     /*
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Review> review = new ArrayList<Review>(); */
@@ -38,24 +39,39 @@ public class Product {
         setSku(sku);
     }
 
-    //Unapproved Product
-    public Product(final Long productID, final String sku, final String designation, final String description) {
+    public Product(final Long productID, final String sku, final String designation, final String description, final String status, final List<String> username) {
         this.productID= productID;
         this.sku = sku;
         setDescription(description);
         setDesignation(designation);
-        this.status = "pending";
-        this.numberApprove = 0;
+        this.status = status;
+        setUsername(username);
     }
 
     public Product(final String sku) {
         setSku(sku);
     }
 
+    public Product(final String sku, final String designation, final String description, final String status, final List<String> username) {
+        this(sku);
+        setDescription(description);
+        setDesignation(designation);
+        this.status=status;
+        this.username = username;
+    }
     public Product(final String sku, final String designation, final String description) {
         this(sku);
         setDescription(description);
         setDesignation(designation);
+        this.status="pending";
+    }
+
+    public Product(final Long productID, final String sku, final String designation, final String description) {
+        this.productID= productID;
+        this.sku = sku;
+        setDescription(description);
+        setDesignation(designation);
+        this.status="pending";
     }
 
     public void setSku(String sku) {
@@ -74,9 +90,7 @@ public class Product {
         if (designation == null || designation.isBlank()) {
             throw new IllegalArgumentException("Designation is a mandatory attribute of Product.");
         }
-        if (designation.length() /*public ProductDTO toDto() {
-        return new ProductDTO(this.sku, this.designation);
-    }*/> 50) {
+        if (designation.length() > 50) {
             throw new IllegalArgumentException("Designation must not be greater than 50 characters.");
         }
         this.designation = designation;
@@ -119,7 +133,32 @@ public class Product {
     public ProductDTO toDto() {
         return new ProductDTO(this.sku, this.designation);
     }
-/*
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getNumberApprove() {
+        return numberApprove;
+    }
+
+    public void setNumberApprove(int numberApprove) {
+        this.numberApprove = numberApprove;
+    }
+
+    public List<String> getUsername() {
+        return username;
+    }
+
+    public void setUsername(List<String> userID) {
+        this.username = userID;
+    }
+
+    /*
     public List<Review> getReview() {
         return review;
     }

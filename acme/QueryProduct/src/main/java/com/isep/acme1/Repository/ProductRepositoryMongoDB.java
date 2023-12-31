@@ -39,11 +39,32 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         ProductMongo save = toProductMongo(product);
+        if (save == null) {
+            System.err.println("Error converting product to ProductMongo");
+            return null;
+        }
+        Optional<Product> existingProduct = findBySku(save.sku);
+        if (existingProduct.isPresent()) {
+            System.err.println("Product with SKU " + save.sku + " already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+        try {
+            mongoTemplate.save(save);
+            System.out.println("Product saved successfully");
+        } catch (Exception e) {
+            System.err.println("Error saving product: " + e.getMessage());
+        }
+        return product;
+        /*if (product == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        ProductMongo save = toProductMongoCreate(product);
         if (findBySku(save.sku).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        mongoTemplate.save(save);
-        return product;
+
+        mongoTemplate.save(save);*/
+        /*return product;*/
     }
 
     @Override
@@ -102,7 +123,17 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
 
     @Override
     public ProductMongo toProductMongo(Product product) {
-        return new ProductMongo(product.getProductID(), product.sku, product.getDesignation(), product.getDescription());
+        return new ProductMongo(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
+    }
+
+    @Override
+    public ProductMongo toProductMongoCreate(Product product) {
+        return new ProductMongo(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription(),product.getStatus());
+    }
+
+    @Override
+    public ProductMongo toProductMongoUser(Product product, String username) {
+        return new ProductMongo(product.getProductID(), product.sku, product.getDesignation(), product.getDescription(), product.getStatus(), username);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ProductMongo{
     @Field(value = "status")
     private String status;
 
-    @Field(value = "userID")
+    @Field(value = "username")
     private List<String> username;
 
     @Field(value = "numberApprove")
@@ -42,11 +42,12 @@ public class ProductMongo{
         setSku(sku);
     }
 
-    public ProductMongo(Long productID, final String sku, final String designation, final String description) {
+    public ProductMongo(Long productID, final String sku, final String designation, final String description, final String status) {
         this(sku);
         this.productID = productID;
         setDescription(description);
         setDesignation(designation);
+        this.status= status;
     }
 
     public ProductMongo(Long productID, final String sku, final String designation, final String description, final String status, String username) {
@@ -115,7 +116,7 @@ public class ProductMongo{
     }
 
     public Product toProduct(){
-        return new Product(this.productID, this.sku,this.designation,this.description);
+        return new Product(this.productID, this.sku,this.designation,this.description,this.status,this.getUsername());
     }
 
     public void setProductID(Long productID) {

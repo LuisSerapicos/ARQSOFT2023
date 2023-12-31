@@ -5,6 +5,7 @@ package com.isep.acme.Repository;
 import com.isep.acme.ConvertIterable;
 import com.isep.acme.Model.Product;
 import com.isep.acme.Model.ProductMongo;
+import com.isep.acme.Model.ProductUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @Component("mongoDB")
 public class ProductRepositoryMongoDB implements ProductDataBase {
     private final MongoTemplate mongoTemplate;
+
 
 
     @Autowired
@@ -103,7 +105,7 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
 
     @Override
     public ProductMongo toProductMongo(Product product) {
-        return new ProductMongo(product.getProductID(), product.sku, product.getDesignation(), product.getDescription());
+        return new ProductMongo(product.getProductID(), product.sku, product.getDesignation(), product.getDescription(),product.getStatus());
     }
 
     @Override
@@ -112,23 +114,43 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
     }
 
     @Override
-    public Boolean userExists(String username) {
-        Query query = new Query(Criteria.where("username").is(username));
+    public Boolean userExists(ProductUser productUser) {
+        Query query = new Query(Criteria.where("sku").is(productUser.getSku()));
         List<ProductMongo> productMongo = mongoTemplate.find(query, ProductMongo.class);
             for (ProductMongo pd : productMongo) {
-            if (pd.getUsername().contains(username)) {
-                return true;
-            }
+                if (pd.getUsername()!= null && pd.getUsername().contains(productUser.getUsername())) {
+                    return true;
+                }
         }
         return false;
     }
 
     @Override
-    public void deleteBySku(String sku) {
+    public Boolean changeStatusApproved(ProductUser productUser) {
+        Query query = new Query(Criteria.where("sku").is(productUser.getSku()));
+        ProductMongo productMongo = mongoTemplate.findOne(query, ProductMongo.class);
+        if(productMongo.getUsername().size() < 2){
+            return false;
+        }
+        if (findBySku(productUser.getSku()).isPresent()) {
+            Query query2 = new Query(Criteria.where("sku").is(productUser.getSku()));
+            Update update = new Update();
+            update.set("status", "approved");
+
+            mongoTemplate.updateFirst(query2, update, ProductMongo.class);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Product deleteBySku(String sku) {
         System.out.println(sku);
         Query query = new Query(Criteria.where("sku").is(sku));
+        ProductMongo productMongo = mongoTemplate.findOne(query, ProductMongo.class);
         System.out.println(query);
         mongoTemplate.remove(query, ProductMongo.class);
+        return productMongo.toProduct();
     }
 
     @Override

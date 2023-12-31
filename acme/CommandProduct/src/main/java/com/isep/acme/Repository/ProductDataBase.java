@@ -4,7 +4,7 @@ package com.isep.acme.Repository;
 
 import com.isep.acme.Model.Product;
 import com.isep.acme.Model.ProductMongo;
-import org.springframework.data.repository.query.Param;
+import com.isep.acme.Model.ProductUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,7 @@ public interface ProductDataBase {
 
     Optional<Product> findBySku(String sku);
     Iterable<Product> getCatalog();
-    void deleteBySku(String sku);
+    Product deleteBySku(String sku);
 
     List<Product> findByDesignation(String designation);
 
@@ -31,5 +31,7 @@ public interface ProductDataBase {
 
     ProductMongo toProductMongoUser(Product product, String username);
 
-    Boolean userExists(String username);
+    Boolean userExists(ProductUser productUser);
+
+    Boolean changeStatusApproved(ProductUser productUser);
 }

@@ -5,10 +5,12 @@ spring:
   application:
     name: productQuery
   rabbitmq:
+    username: guest
+    password: guest
     addresses: localhost:5672
   data:
     mongodb:
-      uri: mongodb://root:password@localhost:27017/query_product
+      uri: mongodb://root:password@localhost:27017/command_product
       database: query_product
 sku:
   interface:
