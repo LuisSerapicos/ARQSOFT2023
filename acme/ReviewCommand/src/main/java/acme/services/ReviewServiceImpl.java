@@ -1,13 +1,19 @@
 package acme.services;
 
-import acme.model.*;
-import acme.repositories.databases.ReviewDataBase;
 import acme.controllers.ResourceNotFoundException;
+import acme.model.*;
+import acme.repositories.databases.ProductDataBase;
+import acme.repositories.databases.ReviewDataBase;
+import acme.repositories.databases.UserDataBase;
+import acme.review.ReviewGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isep.acme.RabbitMQMessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,9 +23,9 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewDataBase reviewDataBase;
-    //private final ProductDataBase productDataBase;
-    //private final UserDataBase userDataBase;
-    //private final ReviewGenerator reviewGenerator;
+    private final ProductDataBase productDataBase;
+    private final UserDataBase userDataBase;
+    private final ReviewGenerator reviewGenerator;
 
     private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
@@ -38,21 +44,35 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Autowired
-    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, ApplicationContext context, RabbitMQMessageProducer rabbitMQMessageProducer) {
+    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, @Value("${recommendation.alg}") String reviewBeanName, @Value("${database.interface.default}") String beanName2, @Value("${user.interface.default}") String beanName3, ApplicationContext context, RabbitMQMessageProducer rabbitMQMessageProducer) {
         this.rabbitMQMessageProducer = rabbitMQMessageProducer;
         this.reviewDataBase = context.getBean(beanName, ReviewDataBase.class);
-        //this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
-        //this.userDataBase = context.getBean(beanName3, UserDataBase.class);
-        //this.reviewGenerator = context.getBean(reviewBeanName, ReviewGenerator.class);
+        this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
+        this.userDataBase = context.getBean(beanName3, UserDataBase.class);
+        this.reviewGenerator = context.getBean(reviewBeanName, ReviewGenerator.class);
+    }
+
+    @Override
+    public Iterable<ReviewDTO> getRecommendedReviews(Long userId)
+    {
+        final Optional<User> user = userDataBase.findById(userId);
+
+        if(user.isEmpty()) return null;
+
+        Optional<List<Review>> r = reviewDataBase.findByUserId(user.get());
+
+        if (r.isEmpty()) return null;
+
+        return reviewGenerator.getRecommendedReviews(userId);
     }
 
     @Override
     public ReviewDTO create(final CreateReviewDTO createReviewDTO, String sku) {
-        final Optional<Product> product = Optional.of(new Product(100L, "skumegafixe2", "designation2", "description2"));
+        final Optional<Product> product = productDataBase.findBySku(sku);
 
         if (product.isEmpty()) return null;
 
-        final var user = Optional.of(new User(100L, "user3", "user3", "usertres", "938233832", "Morada user3"));
+        final var user = userDataBase.findByUsername(createReviewDTO.getUsername());
 
         if (user.isEmpty()) return null;
 
@@ -86,9 +106,44 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Product createProduct(Product product) {
+        reviewDataBase.createProduct(product);
+
+        return product;
+    }
+
+    @Override
+    public User createUser(String userID) {
+        ResponseEntity<String> response = checkIfUserExist(userID.toString());
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            String responseBody = response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                User user = objectMapper.readValue(responseBody, User.class);
+                System.out.println(user);
+                reviewDataBase.createUser(user);
+                return user;
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Handle the exception as needed
+            }
+        }
+        return null;
+    }
+
+    public ResponseEntity<String> checkIfUserExist(String userID){
+        RestTemplate restTemplate = new RestTemplate();
+        String fooResourceUrl = "http://localhost:8083/api/v1/user/user";
+        ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl + "/" + userID, String.class);
+        System.out.println(response);
+        return response;
+    }
+
+    @Override
     public List<ReviewDTO> getReviewsOfProduct(String sku, String status) {
 
-        Optional<Product> product = Optional.of(new Product("skumegafixe1"));
+        Optional<Product> product = productDataBase.findBySku(sku);
         if (product.isEmpty()) return null;
 
         Optional<List<Review>> r = reviewDataBase.findByProductIdStatus(product.get(), status);
@@ -195,7 +250,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ReviewDTO> findReviewsByUser(Long userID) {
 
-        final Optional<User> user = Optional.of(new User("user1", "user1"));
+        final Optional<User> user = userDataBase.findById(userID);
 
         if (user.isEmpty()) return null;
 

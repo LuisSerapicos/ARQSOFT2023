@@ -27,6 +27,11 @@ public class ReviewRepository implements ReviewDataBase {
     }
 
     @Override
+    public Product createProduct(Product product) {
+        return null;
+    }
+
+    @Override
     public Review updateApprovalStatus(Review review) {
         return null;
     }

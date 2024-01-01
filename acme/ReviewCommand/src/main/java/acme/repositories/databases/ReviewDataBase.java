@@ -12,6 +12,10 @@ public interface ReviewDataBase {
 
     Review create(Review review);
 
+    Product createProduct(Product product);
+
+    User createUser(User user);
+
     Review updateApprovalStatus(Review review);
 
     Review updateVote(Review review, String voteType);

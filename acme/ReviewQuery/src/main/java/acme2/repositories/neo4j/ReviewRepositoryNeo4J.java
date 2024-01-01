@@ -86,6 +86,14 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
     }
 
     @Override
+    public Product createProduct(Product product) {
+        ProductNeo4J save = toProductNeo4J(product);
+
+        session.save(save);
+        return product;
+    }
+
+    @Override
     public Review updateApprovalStatus(Review review) {
         if (review == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -319,6 +327,14 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
     }
 
     public ReviewNeo4J toReviewNeo4J(Review review) {
-        return new ReviewNeo4J(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), "report", review.getPublishingDate(), review.getFunFact(), new ProductNeo4J(100L, "skumegafixe2", "designation2", "description2"), new RatingNeo4J(4.5), new UserNeo4J(100L, "user3", "user3", "usertres", "938233832", "Morada user3"));
+        return new ReviewNeo4J(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), "report", review.getPublishingDate(), review.getFunFact(), toProductNeo4J(review.getProduct()), new RatingNeo4J(4.5), toUserNeo4J(review.getUser()));
+    }
+
+    public ProductNeo4J toProductNeo4J(Product product) {
+        return new ProductNeo4J(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
+    }
+
+    public UserNeo4J toUserNeo4J(User user) {
+        return new UserNeo4J(user.getUserId(), user.getUsername(), user.getPassword(), user.getFullName(), user.getNif(), user.getMorada());
     }
 }

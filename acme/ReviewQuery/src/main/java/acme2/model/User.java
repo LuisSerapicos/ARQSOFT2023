@@ -2,11 +2,11 @@ package acme2.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import java.util.HashSet;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Set;
 
 import static acme2.utils.Generator.generateLongID;
@@ -14,12 +14,12 @@ import static acme2.utils.Generator.generateLongID;
 @Entity
 @Getter
 @Setter
-public class User implements UserDetails {
+public class User {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @org.neo4j.ogm.annotation.GeneratedValue
     private Long userId;
 
     @Column(unique = true)
@@ -30,12 +30,7 @@ public class User implements UserDetails {
 
     private String fullName;
 
-    @ElementCollection
-    private Set<Role> authorities = new HashSet<>();
-
-    public void setAuthorities(Set<Role> authorities) {
-        this.authorities = authorities;
-    }
+    private int roleU;
 
     @Column(nullable = false, unique = true)
     private String nif;
@@ -54,14 +49,14 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public User(Long userId, final String username, final String password, final String fullName, final String nif, final String morada, Set<Role> role) {
+    public User(Long userId, final String username, final String password, final String fullName, final String nif, final String morada, Set<Role> role, int roleU) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         setNif(nif);
         this.morada = morada;
-        setAuthorities(role);
+        this.roleU = roleU;
     }
 
     public User(final String username, final String password, final String fullName, final String nif, final String morada) {
@@ -82,10 +77,6 @@ public class User implements UserDetails {
         this.morada = morada;
     }
 
-    public void addAuthority(Role r) {
-        authorities.add(r);
-    }
-
     public void setNif(String nif) {
         if (nif.length() != 9) {
             throw new IllegalArgumentException("NIF must be 9 characters.");
@@ -94,48 +85,15 @@ public class User implements UserDetails {
     }
 
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
     public Long getUserId() {
         return userId;
     }
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
     public String getFullName() {
         return fullName;
     }
 
-    @Override
-    public Set<Role> getAuthorities() {
-        return authorities;
-    }
 
     public String getNif() {
         return nif;
@@ -145,4 +103,6 @@ public class User implements UserDetails {
         return morada;
     }
 }
+
+
 

@@ -10,9 +10,13 @@ public interface ReviewService {
 
     List<ReviewDTO> getReviewsOfProduct(String sku, String status);
 
+    Iterable<ReviewDTO> getRecommendedReviews(Long userId);
+
     ReviewDTO create(CreateReviewDTO createReviewDTO, String sku);
 
     Review createReview(Review review);
+
+    Product createProduct(Product product);
 
     boolean addVoteToReview(Long reviewID, VoteReviewDTO voteReviewDTO);
 

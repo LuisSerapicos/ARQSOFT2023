@@ -3,6 +3,7 @@ package acme2.services;
 import acme2.controllers.ResourceNotFoundException;
 import acme2.model.*;
 import acme2.repositories.databases.ReviewDataBase;
+import acme2.review.ReviewGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -18,7 +19,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewDataBase reviewDataBase;
     //private final ProductDataBase productDataBase;
     //private final UserDataBase userDataBase;
-    //private final ReviewGenerator reviewGenerator;
+    private final ReviewGenerator reviewGenerator;
 
     //@Autowired
     //UserService userService;
@@ -35,11 +36,25 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Autowired
-    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, ApplicationContext context) {
+    public ReviewServiceImpl(@Value("${review.interface.default}") String beanName, @Value("${recommendation.alg}") String reviewBeanName, ApplicationContext context) {
         this.reviewDataBase = context.getBean(beanName, ReviewDataBase.class);
         //this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
         //this.userDataBase = context.getBean(beanName3, UserDataBase.class);
-        //this.reviewGenerator = context.getBean(reviewBeanName, ReviewGenerator.class);
+        this.reviewGenerator = context.getBean(reviewBeanName, ReviewGenerator.class);
+    }
+
+    @Override
+    public Iterable<ReviewDTO> getRecommendedReviews(Long userId)
+    {
+        //final Optional<User> user = userDataBase.findById(userId);
+
+        //if(user.isEmpty()) return null;
+
+        //Optional<List<Review>> r = reviewDataBase.findByUserId(user.get());
+
+        //if (r.isEmpty()) return null;
+
+        return reviewGenerator.getRecommendedReviews(userId);
     }
 
     @Override
@@ -78,6 +93,13 @@ public class ReviewServiceImpl implements ReviewService {
         reviewDataBase.createReview(review);
 
         return review;
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        reviewDataBase.createProduct(product);
+
+        return product;
     }
 
     @Override

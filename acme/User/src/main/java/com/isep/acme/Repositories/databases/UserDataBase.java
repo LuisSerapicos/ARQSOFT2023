@@ -1,7 +1,6 @@
 package com.isep.acme.Repositories.databases;
 
 
-
 import com.isep.acme.Model.User;
 import com.isep.acme.Model.UserMongo;
 
@@ -11,9 +10,9 @@ public interface UserDataBase {
 
     <S extends User> S saveUser(S entity);
 
-    Optional<User> findById(Long userId);
+    Optional<User> findById(String userId);
 
-    User getById(final Long userId);
+    User getById(final String userId);
 
     Optional<User> findByUsername(String username);
 

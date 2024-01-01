@@ -1,7 +1,6 @@
 package com.isep.acme.Repositories.mongodb;
 
 
-import com.isep.acme.Controller.ResourceNotFoundException;
 import com.isep.acme.Model.User;
 import com.isep.acme.Model.UserMongo;
 import com.isep.acme.Repositories.databases.UserDataBase;
@@ -46,8 +45,8 @@ public class UserRepositoryMongoDB implements UserDataBase {
 
     @Override
     @Cacheable
-    public Optional<User> findById(Long userId) {
-        Query query = new Query(Criteria.where("userId").is(userId));
+    public Optional<User> findById(String userId) {
+        Query query = new Query(Criteria.where("_id").is(userId));
         UserMongo user = mongoTemplate.findOne(query, UserMongo.class);
         if (user == null) {
             System.out.println("User don't exist");
@@ -57,23 +56,12 @@ public class UserRepositoryMongoDB implements UserDataBase {
     }
 
     @Override
-    public User getById(Long userId) {
-        return null;
-    }
-
-   /* @Override
     @Cacheable
-    public User getById(Long userId) {
+    public User getById(String userId) {
         final Optional<User> optionalUser = findById(userId);
 
-        if(optionalUser.isEmpty()){
-            throw new ResourceNotFoundException(User.class, userId);
-        }
-        if (!optionalUser.get().isEnabled()) {
-            throw new ResourceNotFoundException(User.class, userId);
-        }
         return optionalUser.get();
-    }*/
+    }
 
     @Override
     @Cacheable

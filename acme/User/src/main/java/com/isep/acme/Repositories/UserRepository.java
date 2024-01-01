@@ -1,7 +1,6 @@
 package com.isep.acme.Repositories;
 
 
-import com.isep.acme.Controller.ResourceNotFoundException;
 import com.isep.acme.Model.User;
 import com.isep.acme.Model.UserMongo;
 import com.isep.acme.Repositories.databases.UserDataBase;
@@ -23,18 +22,14 @@ public class UserRepository implements UserDataBase {
     }
 
     @Override
-    @Cacheable
-    public Optional<User> findById(Long userId){
-     return null;
+    public Optional<User> findById(String userId) {
+        return Optional.empty();
     }
 
     @Cacheable
-    public User getById(final Long userId){
+    public User getById(final String userId){
         final Optional<User> optionalUser = findById(userId);
 
-        if(optionalUser.isEmpty()){
-            throw new ResourceNotFoundException(User.class, userId);
-        }
         return optionalUser.get();
     }
 

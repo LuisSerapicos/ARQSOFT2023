@@ -1,6 +1,7 @@
 package acme.services;
 
 import acme.model.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -10,7 +11,15 @@ public interface ReviewService {
 
     List<ReviewDTO> getReviewsOfProduct(String sku, String status);
 
+    Iterable<ReviewDTO> getRecommendedReviews(Long userId);
+
     ReviewDTO create(CreateReviewDTO createReviewDTO, String sku);
+
+    Product createProduct(Product product);
+
+    User createUser(String userID);
+
+    ResponseEntity<String> checkIfUserExist(String userID);
 
     boolean addVoteToReview(Long reviewID, VoteReviewDTO voteReviewDTO);
 

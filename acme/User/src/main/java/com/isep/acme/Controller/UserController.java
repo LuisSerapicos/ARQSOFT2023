@@ -2,11 +2,9 @@ package com.isep.acme.Controller;
 
 
 import com.isep.acme.Model.User;
-import com.isep.acme.Model.UserView;
 import com.isep.acme.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,6 +24,14 @@ public class UserController {
         User user = userService.getUser(userName);
         if(user.getRoleU()!=2) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"The user is not a Product Manager");
         return true;
+    }
+
+    @GetMapping("/user/{username}")
+    public User getUserIDRolePM(@PathVariable final String username) {
+        System.out.println(username);
+        User user = userService.getUser(username);
+        if(user.getUsername() == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"The user is not a Product Manager");
+        return user;
     }
 
     /*@GetMapping("/username/{username}")

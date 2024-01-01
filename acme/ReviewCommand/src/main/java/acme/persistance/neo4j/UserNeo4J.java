@@ -31,6 +31,8 @@ public class UserNeo4J {
 
     private String nif;
 
+    private int roleU;
+
     private String morada;
 
     public UserNeo4J() {
@@ -47,6 +49,6 @@ public class UserNeo4J {
     }
 
     public User toUser() {
-        return new User(this.userId, this.username, this.password, this.fullName, this.nif, this.morada);
+        return new User(this.userId, this.username, this.password, this.fullName, this.nif, this.morada, this.authorities, this.roleU);
     }
 }

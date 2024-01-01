@@ -2,7 +2,6 @@ package com.isep.acme.Service;
 
 
 import com.isep.acme.Model.User;
-import com.isep.acme.Model.UserView;
 import com.isep.acme.Model.UserViewMapper;
 import com.isep.acme.Repositories.databases.UserDataBase;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 
 import java.util.Optional;
 
@@ -47,7 +42,7 @@ public class UserService {
         return userDataBase.findByUsername(userId).get();
     }
 
-    public Optional<User> getUserId(Long user) {
+    public Optional<User> getUserId(String user) {
         return userDataBase.findById(user);
     }
 }

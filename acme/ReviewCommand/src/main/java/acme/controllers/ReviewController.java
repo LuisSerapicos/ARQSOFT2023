@@ -22,6 +22,9 @@ class ReviewController {
     @Operation(summary = "creates review")
     @PostMapping("/products/{sku}/reviews")
     public ResponseEntity<ReviewDTO> createReview(@PathVariable(value = "sku") final String sku, @RequestBody CreateReviewDTO createReviewDTO) {
+        if (rService.checkIfUserExist(createReviewDTO.getUsername()) != null) {
+            rService.createUser(createReviewDTO.getUsername());
+        }
 
         final var review = rService.create(createReviewDTO, sku);
 

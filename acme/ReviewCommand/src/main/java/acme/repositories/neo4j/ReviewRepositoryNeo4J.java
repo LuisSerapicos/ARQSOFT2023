@@ -7,12 +7,15 @@ import acme.persistance.neo4j.ProductNeo4J;
 import acme.persistance.neo4j.RatingNeo4J;
 import acme.persistance.neo4j.ReviewNeo4J;
 import acme.persistance.neo4j.UserNeo4J;
+import acme.repositories.databases.ProductDataBase;
 import acme.repositories.databases.ReviewDataBase;
+import acme.repositories.databases.UserDataBase;
 import acme.utils.ConvertIterable;
 import acme.utils.RandomLongGenerator;
 import org.neo4j.ogm.model.Result;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -25,17 +28,17 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
 
     private final Session session;
 
-    //private final ProductDataBase productDataBase;
+    private final ProductDataBase productDataBase;
 
-    //private final UserDataBase userDataBase;
+    private final UserDataBase userDataBase;
 
     //private final RatingDataBase ratingDataBase;
 
     @Autowired
-    public ReviewRepositoryNeo4J(ApplicationContext context, Session session) {
+    public ReviewRepositoryNeo4J(@Value("${database.interface.default}") String beanName2, @Value("${user.interface.default}") String beanName3, ApplicationContext context, Session session) {
         this.session = session;
-        //this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
-        //this.userDataBase = context.getBean(beanName3, UserDataBase.class);
+        this.productDataBase = context.getBean(beanName2, ProductDataBase.class);
+        this.userDataBase = context.getBean(beanName3, UserDataBase.class);
         //this.ratingDataBase = context.getBean(beanName4, RatingDataBase.class);
     }
 
@@ -63,7 +66,7 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
     public Review create(Review review) {
 
         User user = review.getUser();
-        User user2 = new User(100L, "user3", "user3", "usertres", "938233832", "Morada user3");
+        User user2 = userDataBase.findByUsername(user.getUsername()).get();
 
         review.setUser(user2);
 
@@ -75,6 +78,22 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
 
         session.save(save);
         return review;
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        ProductNeo4J save = toProductNeo4J(product);
+
+        session.save(save);
+        return product;
+    }
+
+    @Override
+    public User createUser(User user) {
+        UserNeo4J save = toUserNeo4J(user);
+
+        session.save(save);
+        return user;
     }
 
     @Override
@@ -311,6 +330,14 @@ public class ReviewRepositoryNeo4J implements ReviewDataBase {
     }
 
     public ReviewNeo4J toReviewNeo4J(Review review) {
-        return new ReviewNeo4J(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), "report", review.getPublishingDate(), review.getFunFact(), new ProductNeo4J(100L, "skumegafixe2", "designation2", "description2"), new RatingNeo4J(4.5), new UserNeo4J(100L, "user3", "user3", "usertres", "938233832", "Morada user3"));
+        return new ReviewNeo4J(review.getIdReview(), review.getVersion(), review.getApprovalStatus(), review.getReviewText(), review.getUpVote(), review.getDownVote(), "report", review.getPublishingDate(), review.getFunFact(), productDataBase.toProductNeo4J(review.getProduct()), new RatingNeo4J(4.5), userDataBase.toUserNeo4J(review.getUser()));
+    }
+
+    public ProductNeo4J toProductNeo4J(Product product) {
+        return new ProductNeo4J(product.getProductID(), product.getSku(), product.getDesignation(), product.getDescription());
+    }
+
+    public UserNeo4J toUserNeo4J(User user) {
+        return new UserNeo4J(user.getUserId(), user.getUsername(), user.getPassword(), user.getFullName(), user.getNif(), user.getMorada());
     }
 }

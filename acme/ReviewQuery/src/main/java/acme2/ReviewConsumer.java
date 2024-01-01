@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 public class ReviewConsumer {
     private final ReviewService reviewService;
 
-    @RabbitListener(queues = { "${rabbitmq.queue.review}", "${rabbitmq.queue.review2}" })
-    public void consumer(Review review) {
+    @RabbitListener(queues = { "${rabbitmq.queue.review}" })
+    public void consumerReview(Review review) {
         log.info("Consumed {} from queue ", review);
         reviewService.createReview(review);
     }
