@@ -1050,7 +1050,5 @@ public class Cmyhwh {
         System.out.println("myipn");
         System.out.println("bsrjj");
         System.out.println("hvtjy");
-        System.out.println("xlxxx");
-        System.out.println("yxsen");
     }
 }
