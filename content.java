@@ -5,6 +5,5 @@ public class Cmyhwh {
         System.out.println("mdwde");
         System.out.println("gxdis");
         System.out.println("usgqq");
-        System.out.println("lguww");
     }
 }
