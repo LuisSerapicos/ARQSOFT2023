@@ -9,6 +9,5 @@ public class Cmyhwh {
         System.out.println("xpjnr");
         System.out.println("jrklv");
         System.out.println("hbsdr");
-        System.out.println("fhygj");
     }
 }
