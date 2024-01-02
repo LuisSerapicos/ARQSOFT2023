@@ -7,26 +7,26 @@ pipelines:
         caches:
           - maven
         script:
-          - cd QueryProduct
+          - cd acme/QueryProduct
           - mvn -B clean install
     - step:
         name: Command Product
         caches:
           - maven
         script:
-          - cd CommandQuery
+          - cd acme/CommandProduct
           - mvn -B clean install
     - step:
           name: Review Query
           caches:
             - maven
           script:
-            - cd ReviewQuery
+            - cd acme/ReviewQuery
             - mvn -B clean install
     - step:
         name: Review Command
         caches:
           - maven
         script:
-          - cd ReviewCommand
+          - cd acme/ReviewCommand
           - mvn -B clean install
