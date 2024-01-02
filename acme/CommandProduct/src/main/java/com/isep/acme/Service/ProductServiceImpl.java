@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO create(final Product product) {
         final Product p = new Product(skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
         final Product p1 = new Product(111L, skuType.generateSku(product.getDesignation()), product.getDesignation(), product.getDescription());
-        ProductType productWithType = new ProductType(p1,"add");
+        ProductType productWithType = new ProductType(p,"add");
         rabbitMQMessageProducer.publish(
                 productWithType,
                 "internal.exchange",

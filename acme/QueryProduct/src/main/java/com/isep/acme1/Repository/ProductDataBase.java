@@ -16,9 +16,12 @@ public interface ProductDataBase {
     Product updateProduct(String sku, Product product);
 
     Optional<Product> findBySku(String sku);
+
+    Optional<Product> findBySkuUser(String sku);
+
     Iterable<Product> getCatalog();
 
-    ProductMongo toProductMongoUser(Product product, String username);
+    ProductMongo toProductMongoUser(Product product);
 
     void deleteBySku(String sku);
 

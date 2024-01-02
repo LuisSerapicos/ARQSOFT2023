@@ -58,13 +58,13 @@ public class ProductMongo {
         this.status= status;
     }
 
-    public ProductMongo(Long productID, final String sku, final String designation, final String description, final String status, String username) {
+    public ProductMongo(Long productID, final String sku, final String designation, final String description, final String status, List<String> username) {
         this(sku);
         this.productID = productID;
         setDescription(description);
         setDesignation(designation);
         this.status = status;
-        addUsername(username);
+        this.username= username;
     }
 
     public ProductMongo(Long productID, String sku, String designation, String description) {

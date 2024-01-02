@@ -7,6 +7,7 @@ package com.isep.acme1.Service;
 import com.isep.acme1.Model.Product;
 import com.isep.acme1.Model.ProductDTO;
 import com.isep.acme1.Model.ProductDetailDTO;
+import com.isep.acme1.Model.ProductUserDTO;
 
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public interface ProductService {
 
     Iterable<ProductDTO> findByDesignation(final String designation);
 
-    Iterable<ProductDTO> getCatalog();
+    Iterable<ProductUserDTO> getCatalog();
 
     ProductDetailDTO getDetails(final String sku);
 

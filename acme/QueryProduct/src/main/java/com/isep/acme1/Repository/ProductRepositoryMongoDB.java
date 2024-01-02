@@ -72,18 +72,35 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
         if (product == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        ProductMongo save = toProductMongo(product);
+        product.getUsername();
+        ProductMongo save = toProductMongoUser(product);
         if (findBySku(save.sku).isPresent()) {
             Query query = new Query(Criteria.where("sku").is(save.sku));
             Update update = new Update();
             update.set("designation", product.getDesignation());
             update.set("description", product.getDescription());
+            update.set("status",product.getStatus());
+            update.set("username", product.getUsername());
 
             mongoTemplate.updateFirst(query, update, ProductMongo.class);
             return product;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
+
+    public Optional<Product> findBySkuUser(String sku) {
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("sku").is(sku), Criteria.where("status").is("approved"));
+        Query query = new Query(criteria);
+        ProductMongo product = mongoTemplate.findOne(query, ProductMongo.class);
+        if (product == null) {
+            System.out.println("Product don't exist");
+            return Optional.empty();
+        }
+        return Optional.ofNullable(product.toProduct());
+    }
+
+
 
     public Optional<Product> findBySku(String sku) {
         Query query = new Query(Criteria.where("sku").is(sku));
@@ -95,10 +112,8 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
         return Optional.ofNullable(product.toProduct());
     }
 
-    ;
-
     public Iterable<Product> getCatalog() {
-        Query query = new Query();
+        Query query = new Query(Criteria.where("status").is("approved"));
         List<ProductMongo> productMongo = mongoTemplate.find(query, ProductMongo.class);
         if (productMongo.isEmpty()) {
             System.out.println("Product don't exist");
@@ -132,8 +147,8 @@ public class ProductRepositoryMongoDB implements ProductDataBase {
     }
 
     @Override
-    public ProductMongo toProductMongoUser(Product product, String username) {
-        return new ProductMongo(product.getProductID(), product.sku, product.getDesignation(), product.getDescription(), product.getStatus(), username);
+    public ProductMongo toProductMongoUser(Product product) {
+        return new ProductMongo(product.getProductID(), product.sku, product.getDesignation(), product.getDescription(), product.getStatus(), product.getUsername());
     }
 
     @Override

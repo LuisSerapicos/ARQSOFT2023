@@ -1,4 +1,4 @@
-package com.isep.acme1.Model;
+package com.isep.acme.Model;
 
 import javax.persistence.*;
 import java.util.List;
@@ -120,8 +120,6 @@ public class Product {
     public void updateProduct(Product p) {
         setDesignation(p.designation);
         setDescription(p.description);
-        setStatus(p.getStatus());
-        setUsername(p.getUsername());
     }
 
     public Long getProductID() {
@@ -132,13 +130,9 @@ public class Product {
         this.productID = productID;
     }
 
-    public ProductDTO toDto() {
+    /*public ProductDTO toDto() {
         return new ProductDTO(this.sku, this.designation);
-    }
-
-    public ProductUserDTO toUserDto() {
-        return new ProductUserDTO(this.sku, this.designation, this.getStatus(), this.getUsername());
-    }
+    }*/
 
     public String getStatus() {
         return status;

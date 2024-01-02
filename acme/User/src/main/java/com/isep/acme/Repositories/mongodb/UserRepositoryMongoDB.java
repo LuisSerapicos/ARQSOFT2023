@@ -1,6 +1,7 @@
 package com.isep.acme.Repositories.mongodb;
 
 
+import com.isep.acme.Controller.ResourceNotFoundException;
 import com.isep.acme.Model.User;
 import com.isep.acme.Model.UserMongo;
 import com.isep.acme.Repositories.databases.UserDataBase;

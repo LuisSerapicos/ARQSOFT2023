@@ -10,8 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Objects;
 
 @Component
 @AllArgsConstructor
@@ -30,12 +33,14 @@ public class ProductConsumer {
             switch (productRequest.getType()){
                 case "add":
                     create(productRequest.getProduct());
+                    break;
                 case "update":
                     update(productRequest.getProduct());
+                    break;
                 case "delete":
                     delete(productRequest.getProduct());
+                    break;
             }
-
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

@@ -1,6 +1,7 @@
 package com.isep.acme1;
 
 import com.isep.acme1.Model.ProductDTO;
+import com.isep.acme1.Model.ProductUserDTO;
 import com.isep.acme1.Service.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +23,9 @@ public class Controller {
     private final ProductService service;
 
     @GetMapping
-    public ResponseEntity<Iterable<ProductDTO>> getCatalog() {
+    public ResponseEntity<Iterable<ProductUserDTO>> getCatalog() {
         log.info("Get customer registration");
         final var products = service.getCatalog();
-        service.createSku();
         return ResponseEntity.ok().body(products);
     }
 

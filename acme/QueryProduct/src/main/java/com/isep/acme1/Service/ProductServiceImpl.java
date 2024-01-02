@@ -3,6 +3,7 @@ package com.isep.acme1.Service;
 import com.isep.acme1.Model.Product;
 import com.isep.acme1.Model.ProductDTO;
 import com.isep.acme1.Model.ProductDetailDTO;
+import com.isep.acme1.Model.ProductUserDTO;
 import com.isep.acme1.Repository.ProductDataBase;
 import com.isep.acme1.Sku.SkuGenerator;
 import lombok.extern.java.Log;
@@ -40,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<ProductDTO> findBySku(String sku) {
         System.out.println("Service:" +sku);
-        final Optional<Product> product = productDataBase.findBySku(sku);
+        final Optional<Product> product = productDataBase.findBySkuUser(sku);
         if (product.isEmpty())
             return Optional.empty();
         else
@@ -59,12 +60,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Iterable<ProductDTO> getCatalog() {
+    public Iterable<ProductUserDTO> getCatalog() {
         Iterable<Product> p = productDataBase.getCatalog();
         System.out.println("GET" + p);
-        List<ProductDTO> pDto = new ArrayList();
+        List<ProductUserDTO> pDto = new ArrayList();
         for (Product pd : p) {
-            pDto.add(pd.toDto());
+            pDto.add(pd.toUserDto());
         }
         return pDto;
     }
