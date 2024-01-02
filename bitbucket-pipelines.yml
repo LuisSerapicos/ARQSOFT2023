@@ -29,6 +29,9 @@ pipelines:
           - maven
         script:
           - cd acme/QueryProduct
+          - sed -i '/<dependency><groupId>com.isep.acme</groupId>
+            <artifactId>amqp</artifactId>
+            <version>0.0.1-SNAPSHOT</version><\/dependency>/d'
           - mvn -B clean install
     - step:
         name: Command Product
