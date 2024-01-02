@@ -62,7 +62,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-actuator</artifactId>
 				<version>${spring.boot.dependencies.version}</version>
-				<version>${spring.boot.dependencies.version}</version>
 			</dependency>
 
 			<dependency>
