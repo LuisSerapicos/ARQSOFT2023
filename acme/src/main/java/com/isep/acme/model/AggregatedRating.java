@@ -48,4 +48,8 @@ public class AggregatedRating {
     public Long getAggregatedId() {
         return aggregatedId;
     }
+
+    public void setAggregatedId(Long aggregatedId) {
+        this.aggregatedId = aggregatedId;
+    }
 }

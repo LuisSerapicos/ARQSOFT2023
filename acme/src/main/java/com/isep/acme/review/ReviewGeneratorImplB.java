@@ -17,8 +17,8 @@ public class ReviewGeneratorImplB implements ReviewGenerator{
     private final UserDataBase userDataBase;
 
     public ReviewGeneratorImplB(@Value("${review.interface.default}") String beanName, @Value("${user.interface.default}") String beanName2, ApplicationContext context) {
-        this.reviewDataBase = context.getBean(beanName, ReviewDataBase.class);;
-        this.userDataBase = context.getBean(beanName2, UserDataBase.class);;
+        this.reviewDataBase = context.getBean(beanName, ReviewDataBase.class);
+        this.userDataBase = context.getBean(beanName2, UserDataBase.class);
     }
 
     @Override
@@ -69,22 +69,27 @@ public class ReviewGeneratorImplB implements ReviewGenerator{
                 Optional<List<Review>> allUserReviews2 = reviewDataBase.findByUserId(user2.get());
 
                 //Loop through the reviews of the user that voted
-                for (Review r3 : allUserReviews2.get()) {
-                    int upVotes = r3.getUpVote().size() + r3.getDownVote().size();
+                if(allUserReviews2.isPresent()) {
+                    for (Review r3 : allUserReviews2.get()) {
+                        int upVotes = r3.getUpVote().size() + r3.getDownVote().size();
 
-                    //Check the percentage of upvotes in the review
-                    double upVotePercentage = ((double) r3.getUpVote().size() / upVotes) * 100;
-                    System.out.println("Percentage: " + upVotePercentage);
-                    if (upVotePercentage >= 50) {
-                        int index = 0;
+                        //Check the percentage of upvotes in the review
+                        double upVotePercentage = ((double) r3.getUpVote().size() / upVotes) * 100;
+                        System.out.println("Percentage: " + upVotePercentage);
+                        if (upVotePercentage >= 50) {
+                            int index = 0;
 
-                        if (!Objects.equals(selectedReviews.get(index).getIdReview(), r3.getIdReview())) {
-                            selectedReviews.add(ReviewMapper.toDto(r3));
+                            if (selectedReviews.isEmpty() || !Objects.equals(selectedReviews.get(index).getIdReview(), r3.getIdReview())) {
+                                selectedReviews.add(ReviewMapper.toDto(r3));
+                                index++;
+                            }
+                            else
+                                System.out.println("Review is already listed!");
                         }
-                        else
-                            System.out.println("Review is already listed!");
-                        index++;
                     }
+                }
+                else {
+                    System.out.println("No reviews!");
                 }
             }
         }
