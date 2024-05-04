@@ -1,5 +1,5 @@
-# ACME Project Repository
-This project is the codebase for a microservices application developed in Java, focusing solely on backend APIs for writing reviews. The application is designed with scalability, resilience, and modularity in mind, utilizing various technologies and architectural patterns.
+# ACME Project - ARQSOFT2023
+This repository contains the codebase for a microservices application developed as part of a master's degree in ISEP (Instituto Superior de Engenharia do Porto) in software engineering. It was developed in Java, focusing solely on backend APIs for writing reviews and is designed with scalability, resilience, and modularity in mind, utilizing various technologies and architectural patterns.
 
 ## Key Features
 
